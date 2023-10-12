@@ -1,0 +1,54 @@
+.sightbar{
+    background-color: #5F35F5;
+    height: 100vh;
+    width: 80%;
+    text-align: center;
+    margin: 2.5vh auto;
+    color: #fff;
+    border-radius: 20px;
+    padding: 20px;
+}
+.sightbar-img{
+    border-radius: 50%;
+    width: 100px;
+    height: 100px;
+}
+.sightbar .icon{
+    font-size: 30px;
+    margin: 20px 0;
+    cursor: pointer;
+    color: #fff;
+}
+.sightbar .active{
+    position: relative;
+    z-index: 22;
+}
+.sightbar .active::after{
+    position: absolute;
+    top: 0;
+    left: 20px;
+    width: 120px;
+    height: 60px;
+    background-color: #fff;
+    content: '';
+    z-index: -1;
+    border-top-left-radius: 20px;
+    border-bottom-left-radius: 20px;
+    margin-top: 7px;
+}
+.sightbar .active::before{
+    position: absolute;
+    top: 0;
+    right: -20px;
+    width: 10px;
+    height: 60px;
+    background-color: #5F35F5;
+    content: '';
+    border-top-left-radius: 20px;
+    border-bottom-left-radius: 20px;
+    margin-top: 7px;
+}
+.sightbar .active .icon{
+    color:#5F35F5;
+
+}
