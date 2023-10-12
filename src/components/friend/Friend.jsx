@@ -21,9 +21,7 @@ const Friend = () => {
         onValue(friendRef, (snapshot) => {
             let array =[]
             snapshot.forEach((item)=>{
-                if(item.val().reciveId==userInfo.uid){
-                        array.push({...item.val(),'userId':item.key})
-                    }
+                array.push({...item.val(),userId:item.key})
             })
             setFriend(array)
         });
@@ -37,8 +35,6 @@ const Friend = () => {
             remove(ref(db,'friendConfrim/'+item.userId))
         })
     }
-
-
   return (
     <div className='box'>
         <Hadding text ='Friends'/>
@@ -46,14 +42,11 @@ const Friend = () => {
              <div className='list'>
              <Images className='list-img' src={img} />
              <div className="text">
-                 <Hadding text ={item.sendName}/>
+                 <Hadding text ={item.sendId==userInfo.uid ? item.reciveName :item.sendName}/>
              </div>
              <Button onClick={()=>handleBlock(item)} variant="contained" color='error'>block</Button>
          </div>
-
         ))}
-
-
     </div>
   )
 }

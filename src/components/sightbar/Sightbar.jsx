@@ -13,7 +13,6 @@ import { getAuth, signOut } from "firebase/auth";
 
 const Sightbar = () => {
   const [url,setUrl]=useState("home");
-  console.log(url);
   const auth = getAuth();
   let navigete=useNavigate()
   const dispatch = useDispatch()

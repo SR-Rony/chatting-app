@@ -31,19 +31,18 @@ const UserList = () => {
         onValue(friendReqRef, (snapshot) => {
             let array =[]
             snapshot.forEach((item)=>{
-                    array.push(item.val().reciveId+item.val().sendId)
+                array.push(item.val().reciveId+item.val().sendId)
             })
             setFriendReqId(array)
         });
-        // firebase friend request confrim
+        // firebase friend request confrim id
         const friendRef = ref(db, 'friendConfrim');
         onValue(friendRef, (snapshot) => {
             let array =[]
             snapshot.forEach((item)=>{
-                    array.push(item.val().reciveId+item.val().sendId)
+                array.push(item.val().reciveId+item.val().sendId)
             })
             setConfrimFriend(array)
-            console.log(confrimFriend);
         });
 
     },[])

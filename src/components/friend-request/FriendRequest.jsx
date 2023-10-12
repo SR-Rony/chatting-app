@@ -23,26 +23,20 @@ const FriendRequest = () => {
             })
             setFriendRequest(array)
         });
-        // friendRequest confrim
-
-
     },[])
 
 // friend confrim button
-const handleConfrim =(confrim)=>{
-        set(push(ref(db, 'friendConfrim')), {
-            ...confrim
-        }).then(()=>{
-            remove(ref(db,'friendRequest/'+confrim.userId))
-        })
+const handleConfrim =(item)=>{
+    set(push(ref(db, 'friendConfrim')),{
+        ...item
+    }).then(()=>{
+        remove(ref(db,'friendRequest/'+item.userId));
+    })
 }
 // friend delete button
 const handleDelete =(userId)=>{
    remove(ref(db,'friendRequest/'+userId))
 }
-
-
-
   return (
     <div className='box'>
     <Hadding text ='Friend  Request'/>

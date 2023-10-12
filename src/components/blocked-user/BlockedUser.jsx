@@ -14,19 +14,19 @@ const BlockedUser = () => {
     const userInfo =useSelector(state=>state.loginSlice.value)
 
 
-    useEffect(()=>{
-        const friendBlockRef = ref(db, 'friendBlock');
-        onValue(friendBlockRef, (snapshot) => {
-            let array =[]
-            snapshot.forEach((item)=>{
-                if(userInfo.uid==item.val().reciveId){
-                    array.push({...item.val(),'userId':item.key})
-                    console.log(item.val());
-                }
-            })
-            setBlock(array)
-        });
-    })
+    // useEffect(()=>{
+    //     const friendBlockRef = ref(db, 'friendBlock');
+    //     onValue(friendBlockRef, (snapshot) => {
+    //         let array =[]
+    //         snapshot.forEach((item)=>{
+    //             if(userInfo.uid==item.val().reciveId){
+    //                 array.push({...item.val(),'userId':item.key})
+    //                 console.log(item.val());
+    //             }
+    //         })
+    //         setBlock(array)
+    //     });
+    // })
 
 
 
