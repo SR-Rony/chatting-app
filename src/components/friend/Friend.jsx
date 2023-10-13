@@ -29,11 +29,26 @@ const Friend = () => {
 
     // handleunfriend button
     const handleBlock = (item) =>{
-        set(push(ref(db, 'friendBlock')), {
-            ...item
-        }).then(()=>{
-            remove(ref(db,'friendConfrim/'+item.userId))
-        })
+
+        if(userInfo.uid==item.sendId){
+            set(push(ref(db, 'friendBlock')), {
+                blockName:item.reciveName,
+                blockId:item.reciveId,
+                blockbyName:item.sendName,
+                blockbyId:item.sendId
+            }).then(()=>{
+                remove(ref(db,'friendConfrim/'+item.userId))
+            })
+        }else{
+            set(push(ref(db, 'friendBlock')), {
+                blockName:item.sendName,
+                blockId:item.sendId,
+                blockbyName:item.reciveName,
+                blockbyId:item.reciveId
+            }).then(()=>{
+                remove(ref(db,'friendConfrim/'+item.userId))
+            })
+        }
     }
   return (
     <div className='box'>

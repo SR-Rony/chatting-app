@@ -13,7 +13,8 @@ const UserList = () => {
     const [userArray,setUserArray]=useState([])
     // friend request id state
     const [friendReqId,setFriendReqId]=useState([])
-    const [confrimFriend,setConfrimFriend]=useState([])
+    const [confrimFriendId,setConfrimFriendId]=useState([])
+    const [friendBlockId,setFriendBlockId]=useState([])
 
     useEffect(()=>{
         const userRef = ref(db, 'users');
@@ -42,10 +43,20 @@ const UserList = () => {
             snapshot.forEach((item)=>{
                 array.push(item.val().reciveId+item.val().sendId)
             })
-            setConfrimFriend(array)
+            setConfrimFriendId(array)
+        });
+        // friend block id
+        const friendBlockRef = ref(db, 'friendBlock');
+        onValue(friendBlockRef, (snapshot) => {
+            let array =[]
+            snapshot.forEach((item)=>{
+                array.push(item.val().blockId+item.val().blockbyId)
+            })
+            setFriendBlockId(array)
         });
 
     },[])
+    // [friendReqId,userArray,confrimFriendId,friendBlockId]
 
 // handle friend request button
 const handleFriendRequest =(user)=>{
@@ -68,10 +79,12 @@ const handleFriendRequest =(user)=>{
                 </div>
                 {friendReqId.includes(user.userId+userInfo.uid) || friendReqId.includes(userInfo.uid+user.userId)
                 ? <Button variant="contained" color='error'>panding</Button>
-                :confrimFriend.includes(user.userId+userInfo.uid)||confrimFriend.includes(userInfo.uid+user.userId)
+                :confrimFriendId.includes(user.userId+userInfo.uid)||confrimFriendId.includes(userInfo.uid+user.userId)
                 ?<Button variant="contained" color='success'>friend</Button>
+                :friendBlockId.includes(user.userId+userInfo.uid)||friendBlockId.includes(userInfo.uid+user.userId)
+                ?<Button variant="contained" color='error'>block</Button>
                 :<Button onClick={()=>handleFriendRequest(user)} variant="contained">+</Button>
-            }
+            }   
             </div>
         ))}
     </div>
