@@ -17,8 +17,6 @@ import Messages from './pages/messages/Messages';
 
 
 function App() {
-
-
   const router = createBrowserRouter(
     createRoutesFromElements(
       <Route >
@@ -33,13 +31,6 @@ function App() {
       </Route>
     )
   );
-
-
-
-
-
-
-
   return (
     <>
        <RouterProvider router={router} />
@@ -60,5 +51,4 @@ function App() {
     </>
   )
 }
-
 export default App

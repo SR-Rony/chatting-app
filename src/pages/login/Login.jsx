@@ -15,6 +15,7 @@ import { toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import {useSelector,useDispatch } from 'react-redux';
 import { userLogin } from '../../slices/loginSlice';
+import Paragraph from '../../components/paragraph/Paragraph';
 
 
 const Login = () => {
@@ -30,19 +31,14 @@ const Login = () => {
   const [dataLod,serDataLod]=useState(false)
   const dispatch = useDispatch()
 
-
+  /////////////////user all data //////////////////
   const data = useSelector(state=>state.loginSlice.value)
   useEffect(()=>{
     if(data){
       navigete('/home')
     }
   },[])
-
-
-
-
-
-// input change
+/////////////// handle input change //////////////
   const handleChang=(e)=>{
     setUser({...user,[e.target.name]:e.target.value});
     if(e.target.name=='email'){
@@ -52,7 +48,7 @@ const Login = () => {
       setPasswordError("")
     }
   }
-  // handle google sing in click
+  /////////////////// handle google sing in button /////////////////////
   const handleGoogle =()=>{
     signInWithPopup(auth, provider).then((user)=>{
       navigete('/home')
@@ -64,7 +60,7 @@ const Login = () => {
       })
     })
   }
-  // handle login button click
+  //////////////////// handle login button ///////////////////
   const handleClick =()=>{
     if(!email){
       setEmailError("plase inter your email")
@@ -103,11 +99,9 @@ const Login = () => {
     <div className='registration'>
       <div className="left">
       <Container maxWidth="sm">
-        <h2>Login to your account!</h2>
-        <p>Free register and you can enjoy it</p>
-
+        <Hadding text='Login to your account!'/>
+        <Paragraph text='Free register and you can enjoy it'/>
         <Button onClick={handleGoogle} className='btn' variant="contained">goole Sign in</Button>
-
         <TextField className='input' name='email' type='email' id="outlined-basic" label="inter your email" variant="outlined" onChange={handleChang} value={email}/>
         {emailError &&
           <Alert severity="error">{emailError} !</Alert>

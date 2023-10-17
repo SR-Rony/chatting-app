@@ -20,29 +20,24 @@ import { useSelector } from 'react-redux';
 const Registration = () => {
   const db = getDatabase();
   const auth = getAuth();
-  // user useState
     const [user, setUser]=useState({fullName:'',email:'',password:''});
     let {fullName,email,password}=user
-  // name email password error
     const [nameError,setNameError]=useState("")
     const [emailError,setEmailError]=useState("")
     const [passwordError,setPasswordError]=useState("")
-    // password show and hide
     const [eyeToggle,serEyeToggle]=useState(true)
-    // data loding state
     const [dataLod,setDataLod]=useState(false)
-    // navigate
     let navigete=useNavigate()
-  // useSelector user data
+  ///////////////// user all data ///////////////////
     const data = useSelector(state=>state.loginSlice.value)
-    // useEffect
+
     useEffect(()=>{
       if(data){
         navigete('/home')
       }
     },[])
 
-    // input handle change
+    //////////////////// handle input change ///////////////
     const handleChange =(e)=>{
       setUser({ ...user,[e.target.name]:e.target.value });
 
@@ -56,7 +51,7 @@ const Registration = () => {
         setPasswordError("")
       }
     }
-    // sing in button click
+    ////////////////////////// sing in button ////////////////////////////
     const handleClick =()=>{
       if(!fullName){
         setNameError("plase inter your name")
@@ -68,62 +63,55 @@ const Registration = () => {
         setPasswordError("plase inter your password")
       }
       if(fullName && email && password){
-
         let validEmail = /^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/;
         let validPassword = /^(?=.*[0-9])(?=.*[!@#$%^&*])[a-zA-Z0-9!@#$%^&*]{8,16}$/; 
-
-
-        // if(fullName.length>20){
-        //   setNameError('20 tar bashi letter dawa jabe na')
-        // }
-
-        // validEmail 
-
+        //////////// valid email chack /////////////// 
         if(!validEmail.test(email)){
           setEmailError('invalid email')
-        }
-        // valid password
-        if(!validPassword.test(password)){
-          setPasswordError('password not storng')
-        }
-        
-        setDataLod(true)
-        // user authencation
-        createUserWithEmailAndPassword(auth, email, password)
-        .then((user)=>{
-          // user profile
-          updateProfile(auth.currentUser, {
-            displayName: fullName, 
-            photoURL: "https://firebasestorage.googleapis.com/v0/b/chating-app-5b953.appspot.com/o/rony.jpg?alt=media&token=d0a8339f-2dd5-4405-8720-4b9576c43f34"
-          }).then(() => {
-            // email varify
-              sendEmailVerification(auth.currentUser)
-            .then(() => {
-              setUser({fullName:'',email:'',password:''})
-              setDataLod(false)
-              toast("please chack your email");
-            }).then(()=>{
-              set(ref(db, 'users/'+user.user.uid), {
-                username: fullName,
-                email: email,
-                profile_picture : "https://firebasestorage.googleapis.com/v0/b/chating-app-5b953.appspot.com/o/rony.jpg?alt=media&token=d0a8339f-2dd5-4405-8720-4b9576c43f34"
-              });
-            })
-          })
-          setTimeout(()=>{
-            navigete('/login')
-          },1000)
-        })
-        // error
-        .catch((error) => {
-          const errorCode = error.code;
-          const errorMessage = error.message;
-          if(errorCode.includes('auth/email-already-in-use')){
-            toast("email alrady exisit");
-          }
-          setDataLod(false)
-        });
 
+        }else{
+          //////////////// valid password chack ///////////////////
+          if(!validPassword.test(password)){
+            setPasswordError('password not storng')
+          }else{
+            setDataLod(true)
+            ////////////// user authencation /////////////////
+            createUserWithEmailAndPassword(auth, email, password)
+            .then((user)=>{
+              /////////////// user profile ///////////////
+              updateProfile(auth.currentUser, {
+                displayName: fullName, 
+                photoURL: "https://firebasestorage.googleapis.com/v0/b/chating-app-5b953.appspot.com/o/rony.jpg?alt=media&token=d0a8339f-2dd5-4405-8720-4b9576c43f34"
+              }).then(() => {
+                ///////////////// email varify ////////////////////
+                  sendEmailVerification(auth.currentUser)
+                .then(() => {
+                  setUser({fullName:'',email:'',password:''})
+                  setDataLod(false)
+                  toast("please chack your email");
+                }).then(()=>{
+                  set(ref(db, 'users/'+user.user.uid), {
+                    username: fullName,
+                    email: email,
+                    profile_picture : "https://firebasestorage.googleapis.com/v0/b/chating-app-5b953.appspot.com/o/rony.jpg?alt=media&token=d0a8339f-2dd5-4405-8720-4b9576c43f34"
+                  });
+                })
+              })
+              setTimeout(()=>{
+                navigete('/login')
+              },1000)
+            })
+            // error
+            .catch((error) => {
+              const errorCode = error.code;
+              const errorMessage = error.message;
+              if(errorCode.includes('auth/email-already-in-use')){
+                toast("email alrady exisit");
+              }
+              setDataLod(false)
+            });
+          }
+        }
       }
     }
 
@@ -133,16 +121,16 @@ const Registration = () => {
       <Container maxWidth="sm">
         <h2>get stared with easily register</h2>
         <p>Free register and you can enjoy it</p>
-        <TextField className='input' name='fullName' type='text' id="outlined-basic" label="inter your name" variant="outlined" onChange={handleChange} value={fullName}/>
+        <TextField className='input' name='fullName' type='text' id="outlined-basic" label="full name" variant="outlined" onChange={handleChange} value={fullName}/>
         { nameError &&
           <Alert severity="error">{nameError}</Alert>
         }
-        <TextField className='input' name='email' type='email' id="outlined-basic" label="inter your email" variant="outlined" onChange={handleChange} value={email}/>
+        <TextField className='input' name='email' type='email' id="outlined-basic" label="email" variant="outlined" onChange={handleChange} value={email}/>
         {emailError&&
           <Alert severity="error">{emailError}</Alert>
         }
         <div className="password">
-          <TextField className='input' name='password' type={eyeToggle?'password':'text'} id="outlined-basic" label="inter your password" variant="outlined" onChange={handleChange} value={password}/>
+          <TextField className='input' name='password' type={eyeToggle?'password':'text'} id="outlined-basic" label="password" variant="outlined" onChange={handleChange} value={password}/>
           {
           eyeToggle
           ?<FaEyeSlash onClick={()=>serEyeToggle(false)} className='eye'/>

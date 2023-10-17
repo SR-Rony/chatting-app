@@ -12,11 +12,8 @@ const Friend = () => {
     const userInfo =useSelector(state=>state.loginSlice.value)
     const [friend,setFriend]=useState([])
 
-
-
-
     useEffect(()=>{
-        // firebase friend request confrim
+        ///////////////// firebase friend confrim data ///////////////////////
         const friendRef = ref(db, 'friendConfrim');
         onValue(friendRef, (snapshot) => {
             let array =[]
@@ -27,9 +24,8 @@ const Friend = () => {
         });
     },[]);
 
-    // handleunfriend button
+    ////////////////////// friend block button ///////////////////// 
     const handleBlock = (item) =>{
-
         if(userInfo.uid==item.sendId){
             set(push(ref(db, 'friendBlock')), {
                 blockName:item.reciveName,
@@ -59,7 +55,10 @@ const Friend = () => {
              <div className="text">
                  <Hadding text ={item.sendId==userInfo.uid ? item.reciveName :item.sendName}/>
              </div>
-             <Button onClick={()=>handleBlock(item)} variant="contained" color='error'>block</Button>
+             <div className="flex">
+                <Button className='btn' onClick={()=>handleBlock(item)} variant="contained">message</Button>
+                <Button className='btn' onClick={()=>handleBlock(item)} variant="contained" color='error'>block</Button>
+             </div>
          </div>
         ))}
     </div>

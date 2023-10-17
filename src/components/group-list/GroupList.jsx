@@ -10,6 +10,7 @@ import Paragraph from '../paragraph/Paragraph';
 import TextField from '@mui/material/TextField';
 import { getDatabase, push, ref, set,onValue} from "firebase/database";
 import { useSelector } from 'react-redux';
+import './group-list.css'
 
 
 // modal style
@@ -29,10 +30,11 @@ const GroupList = () => {
     const db = getDatabase();
     const [group,setGroup]=useState({gname:'',gtitle:''})
     const [groupArray,setGroupArray]=useState([])
+    const [groupId,setGroupID]=useState([])
     const [open, setOpen] = React.useState(false);
     const handleOpen = () => setOpen(true);
     const handleClose = () => setOpen(false);
-
+    ////////////////// user all information //////////////////
     const userInfo =useSelector(state=>state.loginSlice.value)
 
     useEffect(()=>{
@@ -41,49 +43,56 @@ const GroupList = () => {
             let array=[]
             snapshot.forEach((item)=>{
                 if(userInfo.uid!=item.val().groupAdminId){
-                    array.push({...item.val(),'groupId':item.key})
+                    array.push({...item.val(),groupId:item.key})
+                    console.log('gid',item.val());
                 }
             })
             setGroupArray(array)
         });
+        /////////////////// group id ////////////////
+        const groupRef = ref(db, 'groupRequest' );
+        onValue(groupRef, (snapshot) => {
+            let array=[]
+            snapshot.forEach((item)=>{
+                    array.push(item.val().groupAdminId)
+                    // console.log('group id',item.val().groupAdminId);
+                    console.log('group id','[req]',item.val().groupRequestId+'[admin]',item.val().groupAdminId);
+            })
+            setGroupID(array)
+        });
     },[])
 
-
-
-
-
-
-    // group input change
+    ////////////// group input change /////////////////////
     const handleChang =(e)=>{
         setGroup({...group,[e.target.name]:e.target.value})
     }
 
-    // add new group button
+    //////////// add new group button/////////////////////
     const handleGroupAdd =()=>{
         set(push(ref(db, 'group')),{
             groupName: group.gname,
             groupTitle: group.gtitle,
             groupAdmin:userInfo.displayName,
             groupAdminId:userInfo.uid
-          });
+          }).then(()=>{
+            setOpen(false);
+          })
     }
 
-
-    // user group join
+    ////////////////// user group join//////////////////////
     const handleGroupJoin =(group)=>{
         set(push(ref(db, 'groupRequest')),{
             ...group,
             groupRequestName:userInfo.displayName,
             groupRequestId:userInfo.uid
-          });
-
+          })
     }
 
   return (
     <div className='box'>
         <div className="flex">
             <Hadding text ='Groups List'/>
-            <Button onClick={handleOpen} variant="contained">create group</Button>
+            <Button className='btn' onClick={handleOpen} variant="contained">create group</Button>
         </div>
         {groupArray.map((group)=>(
              <div className='list'>
@@ -91,11 +100,16 @@ const GroupList = () => {
              <div className="text">
                  <Hadding text ={group.groupName}/>
              </div>
-             <Button onClick={()=>handleGroupJoin(group)} variant="contained">join</Button>
+             {/* {groupId.includes(group.groupAdminId)
+              ?<Button className='btn' color='error' variant="contained">pandding</Button>
+              :<Button className='btn' onClick={()=>handleGroupJoin(group)} variant="contained">join</Button>
+             } */}
+              :<Button className='btn' onClick={()=>handleGroupJoin(group)} variant="contained">join</Button>
+
          </div>
         ))}
-        {/* create group modal */}
-        <Modal
+        {/*//////////////////////// create group modal ///////////////////*/}
+        <Modal 
         open={open}
         onClose={handleClose}
         aria-labelledby="modal-modal-title"
@@ -103,15 +117,15 @@ const GroupList = () => {
       >
         <Box sx={style}>
           <Typography id="modal-modal-title" variant="h6" component="h2">
-            Create New Group
+            <Hadding className='hadding' text='Create New Group'/>
           </Typography>
           <Typography id="modal-modal-description" sx={{ mt: 2 }}>
             <Paragraph  text='Group Name :'/>
-            <TextField onChange={handleChang} name='gname'id="outlined-basic" label="inter your group name" variant="outlined" />
+            <TextField className='input' onChange={handleChang} name='gname'id="outlined-basic" label="group name" variant="outlined" />
             <Paragraph text='Group Title :'/>
-            <TextField onChange={handleChang} name='gtitle' id="outlined-basic" label="inter your group title" variant="outlined" />
+            <TextField className='input' onChange={handleChang} name='gtitle' id="outlined-basic" label="group title" variant="outlined" />
           </Typography>
-          <Button onClick={handleGroupAdd} variant="contained">Add Group</Button>
+          <Button className='btn' onClick={handleGroupAdd} variant="contained">Add Group</Button>
         </Box>
       </Modal>
     </div>

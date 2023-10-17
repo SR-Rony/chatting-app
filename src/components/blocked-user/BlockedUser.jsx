@@ -10,21 +10,24 @@ import { useSelector } from 'react-redux';
 const BlockedUser = () => {
     const db = getDatabase();
     const [block,setBlock]=useState([])
+    ////////////////// user all info ////////////////
     const userInfo =useSelector(state=>state.loginSlice.value)
     
     useEffect(()=>{
+        ////////////// firebase friend block data //////////////////
         const friendBlockRef = ref(db, 'friendBlock');
         onValue(friendBlockRef, (snapshot) => {
             let array =[]
             snapshot.forEach((item)=>{
-                if(userInfo.uid==item.val().blockbyId)
-                array.push({...item.val(),userId:item.key})
+                if(userInfo.uid==item.val().blockbyId){
+                    array.push({...item.val(),userId:item.key})
+                }
             });
             setBlock(array)
         });
     },[])
 
-    // handle add firend
+    ////////////////// friend add button ///////////////////
     const handleAddFriend =(item)=>{
        console.log(item);
        set(push(ref(db, 'friendConfrim')),{
@@ -46,7 +49,8 @@ const BlockedUser = () => {
                 <div className="text">
                     <Hadding text ={item.blockName}/>
                 </div>
-                <Button onClick={()=>handleAddFriend(item)} variant="contained">+</Button>
+                {item.block}
+                <Button className='btn' onClick={()=>handleAddFriend(item)} color='error' variant="contained">unblock</Button>
             </div>
         ))}
     </div>

@@ -7,16 +7,15 @@ import { useSelector } from 'react-redux';
 
 const UserList = () => {
     const db = getDatabase();
-    // redux user info
-    const userInfo =useSelector(state=>state.loginSlice.value)
-    // user array state
     const [userArray,setUserArray]=useState([])
-    // friend request id state
     const [friendReqId,setFriendReqId]=useState([])
     const [confrimFriendId,setConfrimFriendId]=useState([])
     const [friendBlockId,setFriendBlockId]=useState([])
+     ///////////// user info /////////////
+     const userInfo =useSelector(state=>state.loginSlice.value)
 
     useEffect(()=>{
+        ///////////// firebase user info ///////////////
         const userRef = ref(db, 'users');
         onValue(userRef, (snapshot) => {
             let array =[]
@@ -27,7 +26,7 @@ const UserList = () => {
             })
             setUserArray(array)
         });
-        // friend request id
+        ///////////////// firebase  friend request id ////////////////
         const friendReqRef = ref(db, 'friendRequest');
         onValue(friendReqRef, (snapshot) => {
             let array =[]
@@ -36,7 +35,7 @@ const UserList = () => {
             })
             setFriendReqId(array)
         });
-        // firebase friend request confrim id
+        //////////////////// firebase friend request confrim id //////////////
         const friendRef = ref(db, 'friendConfrim');
         onValue(friendRef, (snapshot) => {
             let array =[]
@@ -45,7 +44,7 @@ const UserList = () => {
             })
             setConfrimFriendId(array)
         });
-        // friend block id
+        ///////////////// firebase friend block id ///////////////
         const friendBlockRef = ref(db, 'friendBlock');
         onValue(friendBlockRef, (snapshot) => {
             let array =[]
@@ -56,16 +55,15 @@ const UserList = () => {
         });
 
     },[])
-    // [friendReqId,userArray,confrimFriendId,friendBlockId]
 
-// handle friend request button
+//////////////////// friend request button ////////////////
 const handleFriendRequest =(user)=>{
     set(push(ref(db, 'friendRequest')), {
         sendName:userInfo.displayName,
         sendId:userInfo.uid,
         reciveName:user.username,
         reciveId:user.userId,
-      });
+    });
 }
 
   return (
@@ -78,12 +76,12 @@ const handleFriendRequest =(user)=>{
                     <Hadding text ={user.username}/>
                 </div>
                 {friendReqId.includes(user.userId+userInfo.uid) || friendReqId.includes(userInfo.uid+user.userId)
-                ? <Button variant="contained" color='error'>panding</Button>
+                ? <Button className='btn' variant="contained" color='error'>panding</Button>
                 :confrimFriendId.includes(user.userId+userInfo.uid)||confrimFriendId.includes(userInfo.uid+user.userId)
-                ?<Button variant="contained" color='success'>friend</Button>
+                ?<Button className='btn' variant="contained" color='success'>friend</Button>
                 :friendBlockId.includes(user.userId+userInfo.uid)||friendBlockId.includes(userInfo.uid+user.userId)
-                ?<Button variant="contained" color='error'>block</Button>
-                :<Button onClick={()=>handleFriendRequest(user)} variant="contained">+</Button>
+                ?<Button className='btn' variant="contained" color='error'>block</Button>
+                :<Button className='btn' onClick={()=>handleFriendRequest(user)} variant="contained">F request</Button>
             }   
             </div>
         ))}

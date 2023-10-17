@@ -10,17 +10,13 @@ import BlockedUser from '../../components/blocked-user/BlockedUser';
 
 
 const Home = () => {
-
   const data = useSelector(state=>state.loginSlice.value);
-
   useEffect(()=>{
     if(!data){
       navigete('/')
       navigete('/login')
     }
   },[])
-
-
 
   return (
     <>

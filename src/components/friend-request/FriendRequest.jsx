@@ -8,11 +8,12 @@ import { useSelector } from 'react-redux';
 
 const FriendRequest = () => {
     const db = getDatabase();
-    const userInfo =useSelector(state=>state.loginSlice.value)
     const [friendRequest,setFriendRequest]=useState([])
+    ///////////////// user all info //////////////
+    const userInfo =useSelector(state=>state.loginSlice.value)
 
     useEffect(()=>{
-        // firebase friend request
+        ////////////////// firebase friend request data ///////////////
         const friendReqRef = ref(db, 'friendRequest');
         onValue(friendReqRef, (snapshot) => {
             let array =[]
@@ -25,7 +26,7 @@ const FriendRequest = () => {
         });
     },[])
 
-// friend confrim button
+////////////////// friend confrim button /////////////////
 const handleConfrim =(item)=>{
     set(push(ref(db, 'friendConfrim')),{
         ...item
@@ -33,11 +34,12 @@ const handleConfrim =(item)=>{
         remove(ref(db,'friendRequest/'+item.userId));
     })
 }
-// friend delete button
+/////////////////// friend delete button /////////////////
 const handleDelete =(userId)=>{
    remove(ref(db,'friendRequest/'+userId))
 }
-  return (
+
+return (
     <div className='box'>
     <Hadding text ='Friend  Request'/>
         {friendRequest.map((item)=>(
@@ -46,14 +48,13 @@ const handleDelete =(userId)=>{
                 <div className="text">
                     <Hadding text ={item.sendName}/>
                 </div>
-                <Button className='btn' onClick={()=>handleConfrim(item)} variant="contained">confrim</Button>
-                <Button onClick={()=>handleDelete(item.userId)} variant="contained" color='error'>delet</Button>
+                <div className="flex">
+                    <Button className='btn' onClick={()=>handleConfrim(item)} variant="contained">confrim</Button>
+                    <Button className='btn' onClick={()=>handleDelete(item.userId)} variant="contained" color='error'>delet</Button>
+                </div>
             </div>
         ))}
     </div>
-
-
-
   )
 }
 
