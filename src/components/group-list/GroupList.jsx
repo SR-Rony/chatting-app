@@ -8,7 +8,7 @@ import Modal from '@mui/material/Modal';
 import Box from '@mui/material/Box';
 import Paragraph from '../paragraph/Paragraph';
 import TextField from '@mui/material/TextField';
-import { getDatabase, push, ref, set,onValue} from "firebase/database";
+import { getDatabase, push, ref, set,onValue, remove} from "firebase/database";
 import { useSelector } from 'react-redux';
 import './group-list.css'
 
@@ -54,9 +54,9 @@ const GroupList = () => {
         onValue(groupRef, (snapshot) => {
             let array=[]
             snapshot.forEach((item)=>{
-                    array.push(item.val().groupAdminId)
-                    // console.log('group id',item.val().groupAdminId);
-                    console.log('group id','[req]',item.val().groupRequestId+'[admin]',item.val().groupAdminId);
+              if(item.val().groupRequestId==userInfo.uid){
+                array.push({...item.val(),gid:item.key})
+              }
             })
             setGroupID(array)
         });
@@ -88,6 +88,15 @@ const GroupList = () => {
           })
     }
 
+    ////////////////// group request cancle button //////////////
+    const handleGroupCancel =(group)=>{
+      groupId.map((item)=>{
+        if(item.groupId==group.groupId&&item.groupRequestId){
+          remove(ref(db,'groupRequest/'+item.gid))
+        }
+      })
+    }
+
   return (
     <div className='box'>
         <div className="flex">
@@ -100,11 +109,11 @@ const GroupList = () => {
              <div className="text">
                  <Hadding text ={group.groupName}/>
              </div>
-             {/* {groupId.includes(group.groupAdminId)
-              ?<Button className='btn' color='error' variant="contained">pandding</Button>
+             {groupId.find((e)=>e.groupId==group.groupId)
+              ?<Button className='btn' onClick={()=>handleGroupCancel(group)} color='error' variant="contained">cancel</Button>
               :<Button className='btn' onClick={()=>handleGroupJoin(group)} variant="contained">join</Button>
-             } */}
-              :<Button className='btn' onClick={()=>handleGroupJoin(group)} variant="contained">join</Button>
+             }
+            {/* <Button className='btn' onClick={()=>handleGroupJoin(group)} variant="contained">join</Button> */}
 
          </div>
         ))}
