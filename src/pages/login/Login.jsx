@@ -16,6 +16,7 @@ import 'react-toastify/dist/ReactToastify.css';
 import {useSelector,useDispatch } from 'react-redux';
 import { userLogin } from '../../slices/loginSlice';
 import Paragraph from '../../components/paragraph/Paragraph';
+import Hadding from '../../components/hadding/Hadding';
 
 
 const Login = () => {
