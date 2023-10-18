@@ -20,7 +20,7 @@ const BlockedUser = () => {
             let array =[]
             snapshot.forEach((item)=>{
                 if(userInfo.uid==item.val().blockbyId){
-                    array.push({...item.val(),userId:item.key})
+                    array.push({...item.val(),fblockid:item.key})
                 }
             });
             setBlock(array)
@@ -36,7 +36,7 @@ const BlockedUser = () => {
             sendName:item.blockName,
             sendId:item.blockId ,
         }).then(()=>{
-            remove(ref(db,'friendBlock/'+item.userId));
+            remove(ref(db,'friendBlock/'+item.fblockid));
         })
     }
 

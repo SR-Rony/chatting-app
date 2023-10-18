@@ -10,6 +10,7 @@ import { useSelector } from 'react-redux';
 const Friend = () => {
     const db = getDatabase();
     const userInfo =useSelector(state=>state.loginSlice.value)
+    console.log(userInfo.uid);
     const [friend,setFriend]=useState([])
 
     useEffect(()=>{
@@ -18,8 +19,9 @@ const Friend = () => {
         onValue(friendRef, (snapshot) => {
             let array =[]
             snapshot.forEach((item)=>{
-                array.push({...item.val(),userId:item.key})
+                array.push({...item.val(),fdId:item.key})
             })
+            console.log(array);
             setFriend(array)
         });
     },[]);
@@ -33,7 +35,7 @@ const Friend = () => {
                 blockbyName:item.sendName,
                 blockbyId:item.sendId
             }).then(()=>{
-                remove(ref(db,'friendConfrim/'+item.userId))
+                remove(ref(db,'friendConfrim/'+item.fdId))
             })
         }else{
             set(push(ref(db, 'friendBlock')), {
@@ -42,7 +44,7 @@ const Friend = () => {
                 blockbyName:item.reciveName,
                 blockbyId:item.reciveId
             }).then(()=>{
-                remove(ref(db,'friendConfrim/'+item.userId))
+                remove(ref(db,'friendConfrim/'+item.fdId))
             })
         }
     }
@@ -56,7 +58,6 @@ const Friend = () => {
                  <Hadding text ={item.sendId==userInfo.uid ? item.reciveName :item.sendName}/>
              </div>
              <div className="flex">
-                <Button className='btn' onClick={()=>handleBlock(item)} variant="contained">message</Button>
                 <Button className='btn' onClick={()=>handleBlock(item)} variant="contained" color='error'>block</Button>
              </div>
          </div>

@@ -32,12 +32,10 @@ const ForgetPassword = () => {
 
   return (
     <div className='forget'>
-        <div className='box'>
-            <Hadding text='forget password'/>
-            <TextField onChange={(e)=>setEmail(e.target.value)} type='email' id="outlined-basic" label="inter your email" variant="outlined" />
-            <div>
-                <Button onClick={handlPasswordChang} variant="contained">Contained</Button>
-            </div>
+        <div>
+            <Hadding className='hadding' text='forget password'/>
+            <TextField className='input' onChange={(e)=>setEmail(e.target.value)} type='email' id="outlined-basic" label="your email" variant="outlined" />
+            <Button className='btn' onClick={handlPasswordChang} variant="contained">Click Me</Button>
         </div>
     </div>
   )

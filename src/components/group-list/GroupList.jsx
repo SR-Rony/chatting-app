@@ -38,20 +38,19 @@ const GroupList = () => {
     const userInfo =useSelector(state=>state.loginSlice.value)
 
     useEffect(()=>{
-        const starCountRef = ref(db, 'group');
-        onValue(starCountRef, (snapshot) => {
+        const groupRef = ref(db, 'group');
+        onValue(groupRef, (snapshot) => {
             let array=[]
             snapshot.forEach((item)=>{
                 if(userInfo.uid!=item.val().groupAdminId){
                     array.push({...item.val(),groupId:item.key})
-                    console.log('gid',item.val());
                 }
             })
             setGroupArray(array)
         });
         /////////////////// group id ////////////////
-        const groupRef = ref(db, 'groupRequest' );
-        onValue(groupRef, (snapshot) => {
+        const groupReqRef = ref(db, 'groupRequest' );
+        onValue(groupReqRef, (snapshot) => {
             let array=[]
             snapshot.forEach((item)=>{
               if(item.val().groupRequestId==userInfo.uid){
@@ -113,7 +112,6 @@ const GroupList = () => {
               ?<Button className='btn' onClick={()=>handleGroupCancel(group)} color='error' variant="contained">cancel</Button>
               :<Button className='btn' onClick={()=>handleGroupJoin(group)} variant="contained">join</Button>
              }
-            {/* <Button className='btn' onClick={()=>handleGroupJoin(group)} variant="contained">join</Button> */}
 
          </div>
         ))}

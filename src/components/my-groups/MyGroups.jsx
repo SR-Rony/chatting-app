@@ -78,11 +78,6 @@ const MyGroups = () => {
             setGroupArray(array)
         });
     },[])
-
-    //////////////////////// group member button ////////////////////
-    const handleGroupMember =()=>{
-        console.log('member');
-    }
     ///////////////////////// group delete button //////////////////
     const handleDelete =(id)=>{
         remove(ref(db,'group/'+id))

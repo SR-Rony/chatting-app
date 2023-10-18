@@ -21,7 +21,7 @@ const UserList = () => {
             let array =[]
             snapshot.forEach((item)=>{
                 if(userInfo.uid!=item.key){
-                    array.push({...item.val(),'userId':item.key})
+                    array.push({...item.val(),userId:item.key})
                 }
             })
             setUserArray(array)

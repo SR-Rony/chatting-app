@@ -19,7 +19,7 @@ const FriendRequest = () => {
             let array =[]
             snapshot.forEach((item)=>{
                 if(userInfo.uid==item.val().reciveId){
-                    array.push({...item.val(),'userId':item.key})
+                    array.push({...item.val(),freqId:item.key})
                 }
             })
             setFriendRequest(array)
@@ -31,12 +31,12 @@ const handleConfrim =(item)=>{
     set(push(ref(db, 'friendConfrim')),{
         ...item
     }).then(()=>{
-        remove(ref(db,'friendRequest/'+item.userId));
+        remove(ref(db,'friendRequest/'+item.freqId));
     })
 }
 /////////////////// friend delete button /////////////////
-const handleDelete =(userId)=>{
-   remove(ref(db,'friendRequest/'+userId))
+const handleDelete =(freqId)=>{
+   remove(ref(db,'friendRequest/'+freqId))
 }
 
 return (
@@ -50,7 +50,7 @@ return (
                 </div>
                 <div className="flex">
                     <Button className='btn' onClick={()=>handleConfrim(item)} variant="contained">confrim</Button>
-                    <Button className='btn' onClick={()=>handleDelete(item.userId)} variant="contained" color='error'>delet</Button>
+                    <Button className='btn' onClick={()=>handleDelete(item.freqId)} variant="contained" color='error'>delet</Button>
                 </div>
             </div>
         ))}
