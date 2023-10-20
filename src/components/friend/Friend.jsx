@@ -10,7 +10,6 @@ import { useSelector } from 'react-redux';
 const Friend = () => {
     const db = getDatabase();
     const userInfo =useSelector(state=>state.loginSlice.value)
-    console.log(userInfo.uid);
     const [friend,setFriend]=useState([])
 
     useEffect(()=>{
@@ -21,7 +20,6 @@ const Friend = () => {
             snapshot.forEach((item)=>{
                 array.push({...item.val(),fdId:item.key})
             })
-            console.log(array);
             setFriend(array)
         });
     },[]);
