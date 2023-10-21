@@ -2,6 +2,7 @@ import React from 'react'
 import Grid from '@mui/material/Grid';
 import Friend from '../../components/friend/Friend';
 import Group from '../../components/group/Group';
+import MessageList from '../../components/message-list/MessageList';
 
 const Messages = () => {
   return (
@@ -11,7 +12,7 @@ const Messages = () => {
           <Friend/>
         </Grid>
         <Grid item xs={8}>
-          fdshbd
+          <MessageList/>
         </Grid>
       </Grid>
   )
