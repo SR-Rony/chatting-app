@@ -60,7 +60,6 @@ const MyGroups = () => {
             snapshot.forEach((item)=>{
                 if(userInfo.uid==item.val().groupAdminId &&gitem.groupId==item.val().groupId){
                     array.push({...item.val(),requestId:item.key})
-                    console.log('group confirm',item.val());
                     }
             })
             setGroupconfirmList(array)

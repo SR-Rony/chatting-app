@@ -4,17 +4,17 @@ import Hadding from '../hadding/Hadding'
 import Button from '@mui/material/Button';
 import img from '../../assets/img.png'
 import { getDatabase, ref,set, onValue,remove ,push } from "firebase/database";
-import { useSelector } from 'react-redux';
+import { useSelector,useDispatch } from 'react-redux';
+import { activeUser } from '../../slices/activeUserSlice';
 
 const Group = () => {
     const db = getDatabase();
     const [group,setGroup]=useState([])
-
     const userInfo =useSelector(state=>state.loginSlice.value)
+    let dispatch=useDispatch()
 
     useEffect(()=>{
         let array=[]
-        setGroup(array)
         const groupRef = ref(db, 'group' );
         onValue(groupRef, (snapshot) => {
             snapshot.forEach((item)=>{
@@ -32,15 +32,25 @@ const Group = () => {
                 }
             })
         });
+        setGroup(array)
 
     },[])
+
+    // handle group active click
+    const handleGroupActive =(item)=>{
+        dispatch(activeUser({
+            type:'group',
+            activeChatId:item.groupId,
+            activeChatName:item.groupName
+        }))
+    }
 
 
   return (
     <div className='box'>
         <Hadding text ='My Groups'/>
         {group.map((item)=>(
-            <div className='list'>
+            <div className='list' onClick={()=>handleGroupActive(item)}>
                 <Images className='list-img' src={img} />
                 <div className="text">
                     <Hadding text ={item.groupName}/>

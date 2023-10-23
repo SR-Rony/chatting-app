@@ -4,13 +4,15 @@ import Images from '../images/Images'
 import img from '../../assets/img.png'
 import Button from '@mui/material/Button';
 import { getDatabase, ref,set, onValue, remove,push} from "firebase/database";
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
+import { activeUser } from '../../slices/activeUserSlice';
 
 
 const Friend = () => {
     const db = getDatabase();
     const userInfo =useSelector(state=>state.loginSlice.value)
     const [friend,setFriend]=useState([])
+    let dispatch=useDispatch()
 
     useEffect(()=>{
         ///////////////// firebase friend confrim data ///////////////////////
@@ -18,7 +20,9 @@ const Friend = () => {
         onValue(friendRef, (snapshot) => {
             let array =[]
             snapshot.forEach((item)=>{
-                array.push({...item.val(),fdId:item.key})
+                if(userInfo.uid==item.val().sendId || userInfo.uid==item.val().reciveId){
+                    array.push({...item.val(),fdId:item.key})
+                }
             })
             setFriend(array)
         });
@@ -46,11 +50,30 @@ const Friend = () => {
             })
         }
     }
+    // handle active click
+    const handleActive =(item)=>{
+        if(userInfo.uid==item.reciveId){
+            dispatch(activeUser({
+                type:'single',
+                activeChatId:item.sendId,
+                activeChatName:item.sendName
+            }))
+        }else{
+            dispatch(activeUser({
+                type:'single',
+                activeChatId:item.reciveId,
+                activeChatName:item.reciveName
+            }))
+        }
+        
+    }
+
+
   return (
     <div className='box'>
         <Hadding text ='Friends'/>
         {friend.map((item)=>(
-             <div className='list'>
+             <div className='list' onClick={()=>handleActive(item)}>
              <Images className='list-img' src={img} />
              <div className="text">
                  <Hadding text ={item.sendId==userInfo.uid ? item.reciveName :item.sendName}/>

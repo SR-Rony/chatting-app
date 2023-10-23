@@ -1,21 +1,34 @@
 .message-list{
     width: 100%;
-    height: 80vh;
+    height: 100vh;
     background-color: white;
     box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px;
     padding: 20px;
     border-radius: 10px;
     margin-top: 20px;
-    overflow-y: scroll;
     box-sizing: border-box;
+    position: relative;
+    overflow: hidden;
+    
+}
+.messages{
+    width: 100%;
+    height: 80vh;
+    overflow-y: scroll;
+    padding-top: 80px;
 }
 .message-list .profile{
-    padding: 5px 0px;
+    padding: 5px 20px;
     border-bottom: 1px solid black;
     display: flex;
     gap: 5px;
     align-items: center;
     margin-bottom: 20px;
+    position: absolute;
+    width: 100%;
+    top: 0;
+    left: 0;
+    background-color: white;
 }
 .message-list .profile p{
     font-weight: bold;
@@ -67,3 +80,36 @@
     width: 300px;
     height: 300px;
 }
+/* write message css */
+.write-message{
+    border-top: 1px solid black;
+    padding-top: 30px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+.write-message .input{
+    width: 80%;
+    position: relative;
+}
+.write-message .input input{
+    padding: 20px;
+    width: 100%;
+    background-color: #f1f1f1;
+    font-size: 20px;
+}
+.write-message .input .emoji{
+    position: absolute;
+    top: 50%;
+    right: 20px;
+    transform: translateY(-50%);
+    cursor: pointer;
+}
+.write-message .button{
+    width: 16%;
+    padding:10px 20px;
+    background-color: red;
+    text-align: center;
+    cursor: pointer;
+}
+
