@@ -9,23 +9,26 @@ import {BsFillEmojiSmileFill} from 'react-icons/bs'
 import EmojiPicker from 'emoji-picker-react';
 import { useSelector } from 'react-redux'
 import { getDatabase, push, ref, set,onValue  } from "firebase/database";
+import moment from 'moment/moment'
 
 const MessageList = () => {
     const db = getDatabase();
+    const [messageLIst,setMessageList]=useState([])
     const [emoji,setEmoji]=useState(false)
-    const [message,setMessage]=useState('')
+    const [sendMessage,setSendMessage]=useState('')
     const active =useSelector(state=>(state.activeUser.value))
     const userInfo =useSelector(state=>state.loginSlice.value)
 
     useEffect(()=>{
-        const singChatRef = ref(db, 'singChat');
+        const singChatRef = ref(db, 'singleChat');
         onValue(singChatRef, (snapshot) => {
+            let array=[]
             snapshot.forEach((item)=>{
                 if((userInfo.uid==item.val().sendId && active.activeChatId==item.val().reciveId) || (userInfo.uid==item.val().reciveId && active.activeChatId==item.val().sendId) ){
-                    console.log('pfgr9t',item.val());
-                    
+                    array.push(item.val())
                 }
             })
+            setMessageList(array)
         });
     },[])
 
@@ -35,21 +38,16 @@ const MessageList = () => {
     // send message button
     const handleMessage =()=>{
         if(active.type=='single'){
-            set(push(ref(db, 'singChat')),{
+            set(push(ref(db, 'singleChat')),{
                 sendName:userInfo.displayName,
                 sendId:userInfo.uid,
                 reciveName:active.activeChatName,
                 reciveId:active.activeChatId,
-                sendMessage:message
+                message:sendMessage,
+                date:`${new Date().getFullYear()}-${new Date().getMonth()+1}-${new Date().getDate()} ${new Date().getHours()}:${new Date().getMinutes()}`
               });
-        }else{
-            console.log('group');
         }
     }
-
-
-
-
 
   return (
     <div className='message-list'>
@@ -58,9 +56,17 @@ const MessageList = () => {
                 <Paragraph text={active.activeChatName}/>
             </div>
         <div className="messages">
-            <div className='sendmsg'>
-                <Paragraph text='goodmorning'/>
-            </div>
+            {messageLIst.map(item=>(
+                item.sendId==userInfo.uid
+                ?<div className='sendmsg'>
+                    <Paragraph text={item.message}/>
+                    <span>{moment(item.date, "YYYYMMDD hh:mm").fromNow()}</span>
+                </div>
+                :<div className='receivmsg'>
+                    <Paragraph text={item.message}/>
+                    <span>{moment(item.date, "YYYYMMDD hh:mm").fromNow()}</span>
+                </div>
+            ))}
             {/* <div className='receivmsg'>
                 <Paragraph text='goodmorning'/>
             </div>
@@ -97,15 +103,15 @@ const MessageList = () => {
         </div>
         <div className="write-message">
             <div className="input">
-                <input onChange={(e)=>setMessage(e.target.value)} type='text'  />
+                <input onChange={(e)=>setSendMessage(e.target.value)} type='text'  />
                 <div onClick={()=>setEmoji(!emoji)} className="emoji">
                     <BsFillEmojiSmileFill/>
                     {emoji && <EmojiPicker />}
                 </div>
             </div>
-            <div className='button' onClick={handleMessage}>
-                <BsFillEmojiSmileFill/>
-            </div>
+            <button onClick={handleMessage} className='button'>send</button>
+            {/* <div className='button' onClick={handleMessage}>
+            </div> */}
         </div>
     </div>
   )

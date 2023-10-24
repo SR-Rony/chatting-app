@@ -108,8 +108,9 @@
 .write-message .button{
     width: 16%;
     padding:10px 20px;
-    background-color: red;
+    background-color: #f1f1f1;
     text-align: center;
     cursor: pointer;
+    font-size: 20px;
 }
 
