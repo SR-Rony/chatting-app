@@ -1,5 +1,4 @@
 import { createSlice } from '@reduxjs/toolkit'
-import { json } from 'react-router-dom'
 
 export const loginSlice = createSlice({
   name: 'loginSlice',

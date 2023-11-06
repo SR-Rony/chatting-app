@@ -58,12 +58,23 @@ const Friend = () => {
                 activeChatId:item.sendId,
                 activeChatName:item.sendName
             }))
+            set(ref(db, 'lastMessage/'+item.sendId), {
+                type:'single',
+                activeChatId:item.sendId,
+                activeChatName:item.sendName
+            })
         }else{
             dispatch(activeUser({
                 type:'single',
                 activeChatId:item.reciveId,
                 activeChatName:item.reciveName
             }))
+
+            set(ref(db, 'lastMessage/'+item.reciveId), {
+                type:'single',
+                activeChatId:item.reciveId,
+                activeChatName:item.reciveName
+            })
         }
         
     }

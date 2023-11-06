@@ -15,6 +15,7 @@ const MessageList = () => {
     const db = getDatabase();
     const [messageLIst,setMessageList]=useState([])
     const [emoji,setEmoji]=useState(false)
+    const [blockid,setBlockid]=useState([])
     const [sendMessage,setSendMessage]=useState('')
     const active =useSelector(state=>(state.activeUser.value))
     const userInfo =useSelector(state=>state.loginSlice.value)
@@ -30,7 +31,16 @@ const MessageList = () => {
             })
             setMessageList(array)
         });
-    },[])
+        /////friend block data/////////
+        const friendBlockRef = ref(db, 'friendBlock');
+        onValue(friendBlockRef, (snapshot) => {
+            let array =[]
+            snapshot.forEach((item)=>{
+                array.push(item.val().blockId)
+            });
+            setBlockid(array)
+        });
+    },[active.activeChatId])
 
 
 
@@ -45,7 +55,8 @@ const MessageList = () => {
                 reciveId:active.activeChatId,
                 message:sendMessage,
                 date:`${new Date().getFullYear()}-${new Date().getMonth()+1}-${new Date().getDate()} ${new Date().getHours()}:${new Date().getMinutes()}`
-              });
+            })
+            setSendMessage('')
         }
     }
 
@@ -56,17 +67,21 @@ const MessageList = () => {
                 <Paragraph text={active.activeChatName}/>
             </div>
         <div className="messages">
-            {messageLIst.map(item=>(
+            {active.type=='single'
+            ?messageLIst.map(item=>(
                 item.sendId==userInfo.uid
-                ?<div className='sendmsg'>
+                ?<div key={item.key} className='sendmsg'>
                     <Paragraph text={item.message}/>
                     <span>{moment(item.date, "YYYYMMDD hh:mm").fromNow()}</span>
                 </div>
-                :<div className='receivmsg'>
+                :<div key={item.key} className='receivmsg'>
                     <Paragraph text={item.message}/>
                     <span>{moment(item.date, "YYYYMMDD hh:mm").fromNow()}</span>
                 </div>
-            ))}
+                )
+            )
+            :'i am group message'
+            }
             {/* <div className='receivmsg'>
                 <Paragraph text='goodmorning'/>
             </div>
@@ -103,15 +118,16 @@ const MessageList = () => {
         </div>
         <div className="write-message">
             <div className="input">
-                <input onChange={(e)=>setSendMessage(e.target.value)} type='text'  />
-                <div onClick={()=>setEmoji(!emoji)} className="emoji">
-                    <BsFillEmojiSmileFill/>
-                    {emoji && <EmojiPicker />}
+                <input onChange={(e)=>setSendMessage(e.target.value)} type='text' value={sendMessage}  />
+                <div className='emoji' >
+                    <BsFillEmojiSmileFill onClick={()=>setEmoji(!emoji)} />
+                    {emoji && <EmojiPicker onEmojiClick={(e)=>setSendMessage(sendMessage+e.emoji)} />}
                 </div>
             </div>
-            <button onClick={handleMessage} className='button'>send</button>
-            {/* <div className='button' onClick={handleMessage}>
-            </div> */}
+            {blockid.includes(active.activeChatId)
+            ?<button className='button'>block</button>
+            :<button onClick={handleMessage} className='button'>send</button>
+            }
         </div>
     </div>
   )

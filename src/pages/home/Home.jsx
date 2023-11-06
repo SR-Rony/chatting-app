@@ -1,5 +1,5 @@
 import React, { useEffect } from 'react'
-import {useSelector} from 'react-redux';
+import {useDispatch, useSelector} from 'react-redux';
 import Grid from '@mui/material/Grid';
 import GroupList from '../../components/group-list/GroupList';
 import FriendRequest from '../../components/friend-request/FriendRequest';
@@ -7,15 +7,38 @@ import Friend from '../../components/friend/Friend';
 import UserList from '../../components/user-list/UserList';
 import MyGroups from '../../components/my-groups/MyGroups';
 import BlockedUser from '../../components/blocked-user/BlockedUser';
+import { activeUser } from '../../slices/activeUserSlice';
+import { getDatabase, push, ref, set,onValue  } from "firebase/database";
 
 
 const Home = () => {
+  const db = getDatabase();
   const data = useSelector(state=>state.loginSlice.value);
+  const activeData = useSelector(state=>state.activeUser.value);
+  let dispatch =useDispatch()
   useEffect(()=>{
     if(!data){
       navigete('/')
       navigete('/login')
     }
+    ///////////////
+    const lastMessageRef = ref(db, 'lastMessage');
+        onValue(lastMessageRef, (snapshot) => {
+            snapshot.forEach((item)=>{
+              if(data.uid !=item.val().activeChatId){
+                dispatch(activeUser({
+                  type:'single',
+                  activeChatId:item.val().activeChatId,
+                  activeChatName:item.val().activeChatName
+                }))
+              }
+              // dispatch(activeUser({
+              //   type:'single',
+              //   activeChatId:item.val().activeChatId,
+              //   activeChatName:item.val().activeChatName
+              // }))
+            })
+        });
   },[])
 
   return (
