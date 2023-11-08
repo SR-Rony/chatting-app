@@ -101,7 +101,7 @@
 .write-message .input .emoji{
     position: absolute;
     top: 50%;
-    right: 20px;
+    right: 50px;
     transform: translateY(-50%);
     cursor: pointer;
 }
@@ -112,4 +112,19 @@
     text-align: center;
     cursor: pointer;
     font-size: 20px;
+}
+.write-message .input .imgIcon{
+    position: absolute;
+    top: 50%;
+    right: 20px;
+    transform: translateY(-50%);
+    cursor: pointer;
+}
+.audio{
+    position: absolute;
+    top: 50%;
+    right: 80px;
+    transform: translateY(-50%);
+    cursor: pointer;
+
 }

@@ -8,7 +8,7 @@ import UserList from '../../components/user-list/UserList';
 import MyGroups from '../../components/my-groups/MyGroups';
 import BlockedUser from '../../components/blocked-user/BlockedUser';
 import { activeUser } from '../../slices/activeUserSlice';
-import { getDatabase, push, ref, set,onValue  } from "firebase/database";
+import { getDatabase,ref,onValue  } from "firebase/database";
 
 
 const Home = () => {

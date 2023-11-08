@@ -5,20 +5,41 @@ import Images from '../images/Images'
 import Paragraph from '../paragraph/Paragraph'
 import bg from '../../assets/registration.png'
 import ModalImage from "react-modal-image";
-import {BsFillEmojiSmileFill} from 'react-icons/bs'
+import {BsFillEmojiSmileFill,BsImages} from 'react-icons/bs'
 import EmojiPicker from 'emoji-picker-react';
 import { useSelector } from 'react-redux'
 import { getDatabase, push, ref, set,onValue  } from "firebase/database";
+import { getStorage, ref as imgref, uploadBytes,getDownloadURL} from "firebase/storage";
 import moment from 'moment/moment'
+import { Button } from '@mui/material'
+import { AudioRecorder } from 'react-audio-voice-recorder';
 
 const MessageList = () => {
     const db = getDatabase();
+    const storage = getStorage();
     const [messageLIst,setMessageList]=useState([])
     const [emoji,setEmoji]=useState(false)
     const [blockid,setBlockid]=useState([])
     const [sendMessage,setSendMessage]=useState('')
+    // const [audio,setAudio]=useState('')
     const active =useSelector(state=>(state.activeUser.value))
     const userInfo =useSelector(state=>state.loginSlice.value)
+    // audio message 
+    const addAudioElement = (blob) => {
+        const url = URL.createObjectURL(blob);
+        if(active.type=='single'){
+            set(push(ref(db, 'singleChat')),{
+                sendName:userInfo.displayName,
+                sendId:userInfo.uid,
+                reciveName:active.activeChatName,
+                reciveId:active.activeChatId,
+                audio:blob,
+                date:`${new Date().getFullYear()}-${new Date().getMonth()+1}-${new Date().getDate()} ${new Date().getHours()}:${new Date().getMinutes()}`
+            }).then(()=>{
+                console.log(audio);
+            })
+        }
+      };
 
     useEffect(()=>{
         const singChatRef = ref(db, 'singleChat');
@@ -55,9 +76,29 @@ const MessageList = () => {
                 reciveId:active.activeChatId,
                 message:sendMessage,
                 date:`${new Date().getFullYear()}-${new Date().getMonth()+1}-${new Date().getDate()} ${new Date().getHours()}:${new Date().getMinutes()}`
+            }).then(()=>{
+                setSendMessage('')
             })
-            setSendMessage('')
         }
+    }
+    // handle ing uplod
+    const handleImgUplod =(e)=>{
+        const storageRef = imgref(storage,e.target.files[0].name);
+        // 'file' comes from the Blob or File API
+        uploadBytes(storageRef, e.target.files[0]).then((snapshot) => {
+            getDownloadURL(storageRef).then((downloadURL) => {
+                if(active.type=='single'){
+                    set(push(ref(db, 'singleChat')),{
+                        sendName:userInfo.displayName,
+                        sendId:userInfo.uid,
+                        reciveName:active.activeChatName,
+                        reciveId:active.activeChatId,
+                        img:downloadURL,
+                        date:`${new Date().getFullYear()}-${new Date().getMonth()+1}-${new Date().getDate()} ${new Date().getHours()}:${new Date().getMinutes()}`
+                    })
+                }
+              });
+        });
     }
 
   return (
@@ -69,39 +110,54 @@ const MessageList = () => {
         <div className="messages">
             {active.type=='single'
             ?messageLIst.map(item=>(
-                item.sendId==userInfo.uid
-                ?<div key={item.key} className='sendmsg'>
-                    <Paragraph text={item.message}/>
-                    <span>{moment(item.date, "YYYYMMDD hh:mm").fromNow()}</span>
-                </div>
-                :<div key={item.key} className='receivmsg'>
-                    <Paragraph text={item.message}/>
-                    <span>{moment(item.date, "YYYYMMDD hh:mm").fromNow()}</span>
-                </div>
-                )
-            )
-            :'i am group message'
+                item.message
+                ?
+                    item.sendId==userInfo.uid
+                    ?<div key={item.key} className='sendmsg'>
+                        <Paragraph text={item.message}/>
+                        <span>{moment(item.date, "YYYYMMDD hh:mm").fromNow()}</span>
+                    </div>
+                    :<div key={item.key} className='receivmsg'>
+                        <Paragraph text={item.message}/>
+                        <span>{moment(item.date, "YYYYMMDD hh:mm").fromNow()}</span>
+                    </div>
+                :
+                    item.img
+                    ?
+                        item.sendId==userInfo.uid
+                        ?<div className='sendmsg'>
+                            <div className='imgdiv'>
+                                <ModalImage
+                                    small={item.img}
+                                    large={item.img}
+                                />;
+                            </div>
+                            <span>{moment(item.date, "YYYYMMDD hh:mm").fromNow()}</span>
+                        </div>
+                        :<div className='receivmsg'>
+                            <div className='imgdiv'>
+                                <ModalImage
+                                    small={item.img}
+                                    large={item.img}
+                                />;
+                            </div>
+                            <p>{moment(item.date, "YYYYMMDD hh:mm").fromNow()}</p>
+                        </div>
+                    :item.audio
+                    ?
+                        item.sendId==userInfo.uid
+                        ?<div className='sendmsg'>
+                            <audio src={URL.createObjectURL(item.audio)} controls></audio>
+                        </div>
+                        : <div className='receivmsg'>
+                            <audio src={URL.createObjectURL(item.audio)} controls></audio>
+                        </div>
+                    :'iam a video'
+            ))
+            :'i am grouup message'
+                
             }
-            {/* <div className='receivmsg'>
-                <Paragraph text='goodmorning'/>
-            </div>
-            <div className='sendmsg'>
-                <div className='imgdiv'>
-                    <ModalImage
-                        small={bg}
-                        large={bg}
-                        alt="Hello World!"
-                    />;
-                </div>
-            </div>
-            <div className='receivmsg'>
-                <div className='imgdiv'>
-                    <ModalImage
-                        small={bg}
-                        large={bg}
-                    />;
-                </div>
-            </div>
+            {/* 
             <div className='sendmsg'>
                 <audio controls></audio>
             </div>
@@ -123,9 +179,26 @@ const MessageList = () => {
                     <BsFillEmojiSmileFill onClick={()=>setEmoji(!emoji)} />
                     {emoji && <EmojiPicker onEmojiClick={(e)=>setSendMessage(sendMessage+e.emoji)} />}
                 </div>
+                <label>
+                    <input type="file" hidden onChange={handleImgUplod} accept="image/*" />
+                    <BsImages className='imgIcon'/>
+                </label>
+                <div className='audio'>
+                <React.StrictMode>
+                    <AudioRecorder 
+                    onRecordingComplete={addAudioElement}
+                    audioTrackConstraints={{
+                        noiseSuppression: true,
+                        echoCancellation: true,
+                    }} 
+                    downloadOnSavePress={false}
+                    downloadFileExtension="webm"
+                    />
+                </React.StrictMode>
+                </div>
             </div>
             {blockid.includes(active.activeChatId)
-            ?<button className='button'>block</button>
+            ?<Button color='error'>block</Button>
             :<button onClick={handleMessage} className='button'>send</button>
             }
         </div>
