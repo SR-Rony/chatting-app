@@ -21,7 +21,7 @@ const Home = () => {
       navigete('/')
       navigete('/login')
     }
-    ///////////////
+    /////last message//////////
     const lastMessageRef = ref(db, 'lastMessage');
         onValue(lastMessageRef, (snapshot) => {
             snapshot.forEach((item)=>{

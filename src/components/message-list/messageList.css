@@ -17,6 +17,10 @@
     overflow-y: scroll;
     padding-top: 80px;
 }
+.messages span{
+    display: block;
+    text-align: center;
+}
 .message-list .profile{
     padding: 5px 20px;
     border-bottom: 1px solid black;
@@ -98,10 +102,10 @@
     background-color: #f1f1f1;
     font-size: 20px;
 }
-.write-message .input .emoji{
+.write-message .input .audio{
     position: absolute;
     top: 50%;
-    right: 50px;
+    right: 45px;
     transform: translateY(-50%);
     cursor: pointer;
 }
@@ -116,15 +120,20 @@
 .write-message .input .imgIcon{
     position: absolute;
     top: 50%;
-    right: 20px;
+    right: 15px;
     transform: translateY(-50%);
     cursor: pointer;
 }
-.audio{
+.emoji{
     position: absolute;
     top: 50%;
-    right: 80px;
+    right: 100px;
     transform: translateY(-50%);
     cursor: pointer;
 
+}
+.user-block{
+    font-size: 40px;
+    color: red;
+    text-align: center;
 }
