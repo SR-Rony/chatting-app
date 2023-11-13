@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { createRef, useState } from 'react'
 import './sightbar.css'
 import { useSelector,useDispatch } from 'react-redux';
 import Images from '../images/Images';
@@ -14,6 +14,8 @@ import { Button } from '@mui/material';
 import Box from '@mui/material/Box';
 import Typography from '@mui/material/Typography';
 import Modal from '@mui/material/Modal';
+import Cropper from "react-cropper";
+import "cropperjs/dist/cropper.css";
 
 // modal style
 const style = {
@@ -28,7 +30,8 @@ const style = {
   p: 4,
 };
 
-
+const defaultSrc =
+  "https://raw.githubusercontent.com/roadmanfong/react-cropper/master/example/img/child.jpg";
 
 
 
@@ -38,12 +41,32 @@ const Sightbar = () => {
   const [open, setOpen] = React.useState(false);
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
-
+// images cropper
+const [image, setImage] = useState(defaultSrc);
+  const [cropData, setCropData] = useState("#");
+  const cropperRef = createRef();
+  ////
   const auth = getAuth();
   let navigete=useNavigate()
   const dispatch = useDispatch()
 
     const data =useSelector(state=>state.loginSlice.value)
+
+    // images cropper
+    const handleImg = (e) => {
+      e.preventDefault();
+      let files;
+      if (e.dataTransfer) {
+        files = e.dataTransfer.files;
+      } else if (e.target) {
+        files = e.target.files;
+      }
+      const reader = new FileReader();
+      reader.onload = () => {
+        setImage(reader.result);
+      };
+      reader.readAsDataURL(files[0]);
+    };
 
   // user logout button
     const handleLogout =()=>{
@@ -53,6 +76,15 @@ const Sightbar = () => {
         navigete('/login')
       })
     }
+
+    // ///////////
+
+    const getCropData = () => {
+      if (typeof cropperRef.current?.cropper !== "undefined") {
+        setCropData(cropperRef.current?.cropper.getCroppedCanvas().toDataURL());
+      }
+    };
+
 
   return (
     <div className='sightbar'>
@@ -77,7 +109,44 @@ const Sightbar = () => {
             <Hadding text='Images uplod'/>
           </Typography>
           <Typography id="modal-modal-description" sx={{ mt: 2 }}>
-            <input type="file" />
+            <input onChange={handleImg} type="file" />
+            <Cropper
+              ref={cropperRef}
+              style={{ height: 400, width: "100%" }}
+              zoomTo={0.5}
+              initialAspectRatio={1}
+              preview=".img-preview"
+              src={image}
+              viewMode={1}
+              minCropBoxHeight={10}
+              minCropBoxWidth={10}
+              background={false}
+              responsive={true}
+              autoCropArea={1}
+              checkOrientation={false}
+              guides={true}
+            />
+            <div>
+              <div className="croppbox" style={{ width: "50%", float: "right" }}>
+                <h1>Preview</h1>
+                <div
+                  className="img-preview"
+                  style={{ width: "100%", float: "left", height: "300px" }}
+                />
+              </div>
+              <div
+                className="croppbox"
+                style={{ width: "50%", float: "right", height: "300px" }}
+              >
+                <h1>
+                  <span>Crop</span>
+                  <button style={{ float: "right" }} onClick={getCropData}>
+                    Crop Image
+                  </button>
+                </h1>
+                <img style={{ width: "100%" }} src={cropData} alt="cropped" />
+              </div>
+            </div>
           </Typography>
         </Box>
       </Modal>
