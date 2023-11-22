@@ -24,22 +24,23 @@ const MessageList = () => {
     const [emoji,setEmoji]=useState(false)
     // const [blockid,setBlockid]=useState([])
     const [sendMessage,setSendMessage]=useState('')
-    // const [audio,setAudio]=useState('')
+    const [audio,setAudio]=useState('')
     const active =useSelector(state=>(state.activeUser.value))
     const userInfo =useSelector(state=>state.loginSlice.value)
     // audio message 
     const addAudioElement = (blob) => {
         // const url = URL.createObjectURL(blob);
-        if(active.type=='single'){
-            set(push(ref(db, 'singleChat')),{
-                sendName:userInfo.displayName,
-                sendId:userInfo.uid,
-                reciveName:active.activeChatName,
-                reciveId:active.activeChatId,
-                audio:URL.createObjectURL(blob),
-                date:`${new Date().getFullYear()}-${new Date().getMonth()+1}-${new Date().getDate()} ${new Date().getHours()}:${new Date().getMinutes()}`
-            })
-        }
+        setAudio(blob)
+        // if(active.type=='single'){
+        //     set(push(ref(db, 'singleChat')),{
+        //         sendName:userInfo.displayName,
+        //         sendId:userInfo.uid,
+        //         reciveName:active.activeChatName,
+        //         reciveId:active.activeChatId,
+        //         audio:blob,
+        //         date:`${new Date().getFullYear()}-${new Date().getMonth()+1}-${new Date().getDate()} ${new Date().getHours()}:${new Date().getMinutes()}`
+        //     })
+        // }
       };
 
     useEffect(()=>{
@@ -120,6 +121,25 @@ const MessageList = () => {
               });
         });
     }
+    // handleAudio send button
+    const handleAudio =()=>{
+        const storageRef = imgref(storage,Date.now().toString());
+        // 'file' comes from the Blob or File API
+        uploadBytes(storageRef, audio).then((snapshot) => {
+            getDownloadURL(storageRef).then((downloadURL) => {
+                if(active.type=='single'){
+                    set(push(ref(db, 'singleChat')),{
+                        sendName:userInfo.displayName,
+                        sendId:userInfo.uid,
+                        reciveName:active.activeChatName,
+                        reciveId:active.activeChatId,
+                        audio:downloadURL,
+                        date:`${new Date().getFullYear()}-${new Date().getMonth()+1}-${new Date().getDate()} ${new Date().getHours()}:${new Date().getMinutes()}`
+                    })
+                }
+              });
+        });
+    }
 
   return (
     <div className='message-list'>
@@ -184,6 +204,7 @@ const MessageList = () => {
                         <span>{moment(item.date, "YYYYMMDD hh:mm").fromNow()}</span>
                     </div>
             ))
+            // group message==========
             :groupMessageList.map(item=>(
                 item.message
                 ?
@@ -277,31 +298,42 @@ const MessageList = () => {
         } */}
         
     <div className="write-message">
-        <div className="input">
-            <input onChange={(e)=>setSendMessage(e.target.value)} type='text' value={sendMessage}  />
-            <div className='emoji' >
-                <BsFillEmojiSmileFill onClick={()=>setEmoji(!emoji)} />
-                {emoji && <EmojiPicker onEmojiClick={(e)=>setSendMessage(sendMessage+e.emoji)} />}
-            </div>
-            <label>
-                <input type="file" hidden onChange={handleImgUplod} accept="image/*" />
-                <BsImages className='imgIcon'/>
-            </label>
-            <div className='audio'>
-            <React.StrictMode>
-                <AudioRecorder 
-                onRecordingComplete={addAudioElement}
-                audioTrackConstraints={{
-                    noiseSuppression: true,
-                    echoCancellation: true,
-                }} 
-                downloadOnSavePress={false}
-                downloadFileExtension="webm"
-                />
-            </React.StrictMode>
+        {audio
+        ?<div className='audio-input'>
+            <audio src={URL.createObjectURL(audio)} controls></audio>
+            <div>
+            <Button variant="contained" onClick={handleAudio}  >Send</Button>
+            <Button color='error' variant="contained" onClick={()=>setAudio('')}>Delete</Button>
             </div>
         </div>
-        <button onClick={handleMessage} className='button'>send</button>
+        :<>
+            <div className="input">
+                <input onChange={(e)=>setSendMessage(e.target.value)} type='text' value={sendMessage}  />
+                <div className='emoji' >
+                    <BsFillEmojiSmileFill onClick={()=>setEmoji(!emoji)} />
+                    {emoji && <EmojiPicker onEmojiClick={(e)=>setSendMessage(sendMessage+e.emoji)} />}
+                </div>
+                <label>
+                    <input type="file" hidden onChange={handleImgUplod} accept="image/*" />
+                    <BsImages className='imgIcon'/>
+                </label>
+                <div className='audio'>
+                <React.StrictMode>
+                    <AudioRecorder 
+                    onRecordingComplete={addAudioElement}
+                    audioTrackConstraints={{
+                        noiseSuppression: true,
+                        echoCancellation: true,
+                    }} 
+                    downloadOnSavePress={false}
+                    downloadFileExtension="webm"
+                    />
+                </React.StrictMode>
+                </div>
+            </div>
+            <Button variant="contained" onClick={handleMessage}  >Send</Button>
+        </>
+        }
         </div>
     </div>
   )
