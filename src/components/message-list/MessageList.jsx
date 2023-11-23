@@ -31,16 +31,6 @@ const MessageList = () => {
     const addAudioElement = (blob) => {
         // const url = URL.createObjectURL(blob);
         setAudio(blob)
-        // if(active.type=='single'){
-        //     set(push(ref(db, 'singleChat')),{
-        //         sendName:userInfo.displayName,
-        //         sendId:userInfo.uid,
-        //         reciveName:active.activeChatName,
-        //         reciveId:active.activeChatId,
-        //         audio:blob,
-        //         date:`${new Date().getFullYear()}-${new Date().getMonth()+1}-${new Date().getDate()} ${new Date().getHours()}:${new Date().getMinutes()}`
-        //     })
-        // }
       };
 
     useEffect(()=>{
@@ -58,9 +48,10 @@ const MessageList = () => {
         onValue(groupChatRef, (snapshot) => {
             let array=[]
             snapshot.forEach((item)=>{
-                if((userInfo.uid==item.val().sendId && active.activeChatId==item.val().reciveId) || (userInfo.uid==item.val().reciveId && active.activeChatId==item.val().sendId) ){
-                    array.push(item.val())
+                if(active.activeChatId==item.val().reciveId){
+                 array.push(item.val())
                 }
+                // console.log('group message',item.val());
             })
             setGroupMessageList(array)
         });
@@ -135,6 +126,19 @@ const MessageList = () => {
                         reciveId:active.activeChatId,
                         audio:downloadURL,
                         date:`${new Date().getFullYear()}-${new Date().getMonth()+1}-${new Date().getDate()} ${new Date().getHours()}:${new Date().getMinutes()}`
+                    }).then(()=>{
+                        setAudio('')
+                    })
+                }else{
+                    set(push(ref(db, 'groupChat')),{
+                        sendName:userInfo.displayName,
+                        sendId:userInfo.uid,
+                        reciveName:active.activeChatName,
+                        reciveId:active.activeChatId,
+                        audio:downloadURL,
+                        date:`${new Date().getFullYear()}-${new Date().getMonth()+1}-${new Date().getDate()} ${new Date().getHours()}:${new Date().getMinutes()}`
+                    }).then(()=>{
+                        setAudio('')
                     })
                 }
               });
@@ -331,7 +335,7 @@ const MessageList = () => {
                 </React.StrictMode>
                 </div>
             </div>
-            <Button variant="contained" onClick={handleMessage}  >Send</Button>
+            <Button variant="contained" onClick={handleMessage} >Send</Button>
         </>
         }
         </div>

@@ -63,7 +63,7 @@ const Group = () => {
                     </div>
                     :<Button className='btn' onClick={()=>handleGroupCancel(group)} color='error' variant="contained">cancel</Button>
                 } */}
-                <Button className='btn' variant="contained">join</Button>
+                
             </div>
         ))}
     </div>

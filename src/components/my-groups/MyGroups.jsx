@@ -84,7 +84,6 @@ const MyGroups = () => {
     }
     ////////////////// group joyn confriem button /////////////////
     const handleConfirm =(item)=>{
-        console.log('confrem',item);
         set(push(ref(db, 'groupRequestConfirem')),{
             ...item
           }).then(()=>{
@@ -94,6 +93,11 @@ const MyGroups = () => {
     ///////////////////// group member cancel button /////////////////////2
     const handleCancel =(item)=>{
         remove(ref(db,'groupRequest/'+item.requestId))
+    }
+    // deleteGroupMember
+    const deleteGroupMember =(item)=>{
+        remove(ref(db,'groupRequestConfirem/'+item.requestId ))
+        // console.log('fhoeraiufgi',item);
     }
 
   return (
@@ -141,7 +145,6 @@ const MyGroups = () => {
                             color="text.primary"
                         >
                              <div className="flex">
-                                fgskdkjf
                                 <Button className='btn' onClick={()=>handleConfirm(item)}  variant="contained">confirm</Button>
                                 <Button className='btn' onClick={()=>handleCancel(item)}  color='error' variant="contained">cancel</Button>
                              </div>
@@ -164,12 +167,12 @@ const MyGroups = () => {
         >
             <Box sx={style}>
             <Typography id="modal-modal-title" variant="h6" component="h2">
-                group request list
+                group member list
             </Typography>
             <Typography id="modal-modal-description" sx={{ mt: 2 }}>
             <List sx={{ width: '100%', maxWidth: 360, bgcolor: 'background.paper' }}>
                 {groupconfirmList.map((item)=>(
-                    <ListItem alignItems="flex-start">
+                    <ListItem alignItems="flex">
                     <ListItemAvatar>
                     <Avatar alt="Remy Sharp" src="/static/images/avatar/1.jpg" />
                     </ListItemAvatar>
@@ -183,10 +186,8 @@ const MyGroups = () => {
                             variant="body2"
                             color="text.primary"
                         >
-                             <div className="flex">
-                                fgskdkjf
-                                <Button className='btn'  color='error' variant="contained">remove</Button>
-                             </div>
+                        <Button className='btn' onClick={()=>deleteGroupMember(item)}  color='error' variant="contained">Delete</Button>
+                             
                         </Typography>
                         </React.Fragment>
                     }

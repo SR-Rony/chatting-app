@@ -31,6 +31,9 @@ const GroupList = () => {
     const [group,setGroup]=useState({gname:'',gtitle:''})
     const [groupArray,setGroupArray]=useState([])
     const [groupId,setGroupID]=useState([])
+    // const [groupConfirmID,setGroupConfirmID]=useState([])
+
+    // modal
     const [open, setOpen] = React.useState(false);
     const handleOpen = () => setOpen(true);
     const handleClose = () => setOpen(false);
@@ -59,6 +62,19 @@ const GroupList = () => {
             })
             setGroupID(array)
         });
+        /////////////////// group req confriem id ////////////////
+        // const groupReqConfirmRef = ref(db, 'groupRequestConfirem' );
+        // onValue(groupReqConfirmRef, (snapshot) => {
+        //     let array=[]
+        //     snapshot.forEach((item)=>{
+        //       if(item.val().groupRequestId==userInfo.uid){
+        //         array.push(item.val().groupId+item.val().groupRequestId)
+        //       }
+        //       // console.log('confirm',item.val());
+        //     })
+        //     // console.log('group confirm id',array);
+        //     setGroupConfirmID(array)
+        // });
     },[])
 
     ////////////// group input change /////////////////////
@@ -111,6 +127,7 @@ const GroupList = () => {
              {groupId.find((e)=>e.groupId==group.groupId)
               ?<Button className='btn' onClick={()=>handleGroupCancel(group)} color='error' variant="contained">cancel</Button>
               :<Button className='btn' onClick={()=>handleGroupJoin(group)} variant="contained">join</Button>
+              // <Button className='btn' onClick={()=>handleGroupJoin(group)} variant="contained">join</Button>
              }
 
          </div>

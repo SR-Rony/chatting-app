@@ -26,6 +26,7 @@ const style = {
   left: '50%',
   transform: 'translate(-50%, -50%)',
   width: 400,
+  height:'90%',
   bgcolor: 'background.paper',
   border: '2px solid #000',
   boxShadow: 24,
@@ -134,7 +135,7 @@ const Sightbar = () => {
             <input onChange={handleImg} type="file" />
             <Cropper
               ref={cropperRef}
-              style={{ height: 400, width: "100%" }}
+              style={{ height: 200, width: "100%" }}
               zoomTo={0.5}
               initialAspectRatio={1}
               preview=".img-preview"
