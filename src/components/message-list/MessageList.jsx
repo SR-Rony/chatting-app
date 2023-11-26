@@ -14,6 +14,7 @@ import moment from 'moment/moment'
 import { Button } from '@mui/material'
 import { AudioRecorder } from 'react-audio-voice-recorder';
 import Hadding from '../hadding/Hadding'
+import {toast } from 'react-toastify';
 
 const MessageList = () => {
     const db = getDatabase();
@@ -51,7 +52,6 @@ const MessageList = () => {
                 if(active.activeChatId==item.val().reciveId){
                  array.push(item.val())
                 }
-                // console.log('group message',item.val());
             })
             setGroupMessageList(array)
         });
@@ -63,34 +63,46 @@ const MessageList = () => {
                 setBlockid(item.val().blockId)
                 setBlockbyid(item.val().blockbyId)
             });
-            // setBlockbyid(array)
         });
     },[active.activeChatId])
 
     // send message button
     const handleMessage =()=>{
-        if(active.type=='single'){
-            set(push(ref(db, 'singleChat')),{
-                sendName:userInfo.displayName,
-                sendId:userInfo.uid,
-                reciveName:active.activeChatName,
-                reciveId:active.activeChatId,
-                message:sendMessage,
-                date:`${new Date().getFullYear()}-${new Date().getMonth()+1}-${new Date().getDate()} ${new Date().getHours()}:${new Date().getMinutes()}`
-            }).then(()=>{
-                setSendMessage('')
-            })
+        if(!sendMessage){
+            toast.error('🦄 No Message !', {
+                position: "bottom-center",
+                autoClose: 5000,
+                hideProgressBar: false,
+                closeOnClick: true,
+                pauseOnHover: true,
+                draggable: true,
+                progress: undefined,
+                theme: "dark",
+            });
         }else{
-            set(push(ref(db, 'groupChat')),{
-                sendName:userInfo.displayName,
-                sendId:userInfo.uid,
-                reciveName:active.activeChatName,
-                reciveId:active.activeChatId,
-                message:sendMessage,
-                date:`${new Date().getFullYear()}-${new Date().getMonth()+1}-${new Date().getDate()} ${new Date().getHours()}:${new Date().getMinutes()}`
-            }).then(()=>{
-                setSendMessage('')
-            })
+            if(active.type=='single'){
+                set(push(ref(db, 'singleChat')),{
+                    sendName:userInfo.displayName,
+                    sendId:userInfo.uid,
+                    reciveName:active.activeChatName,
+                    reciveId:active.activeChatId,
+                    message:sendMessage,
+                    date:`${new Date().getFullYear()}-${new Date().getMonth()+1}-${new Date().getDate()} ${new Date().getHours()}:${new Date().getMinutes()}`
+                }).then(()=>{
+                    setSendMessage('')
+                })
+            }else{
+                set(push(ref(db, 'groupChat')),{
+                    sendName:userInfo.displayName,
+                    sendId:userInfo.uid,
+                    reciveName:active.activeChatName,
+                    reciveId:active.activeChatId,
+                    message:sendMessage,
+                    date:`${new Date().getFullYear()}-${new Date().getMonth()+1}-${new Date().getDate()} ${new Date().getHours()}:${new Date().getMinutes()}`
+                }).then(()=>{
+                    setSendMessage('')
+                })
+            }
         }
     }
     // handle ing uplod
@@ -101,6 +113,15 @@ const MessageList = () => {
             getDownloadURL(storageRef).then((downloadURL) => {
                 if(active.type=='single'){
                     set(push(ref(db, 'singleChat')),{
+                        sendName:userInfo.displayName,
+                        sendId:userInfo.uid,
+                        reciveName:active.activeChatName,
+                        reciveId:active.activeChatId,
+                        img:downloadURL,
+                        date:`${new Date().getFullYear()}-${new Date().getMonth()+1}-${new Date().getDate()} ${new Date().getHours()}:${new Date().getMinutes()}`
+                    })
+                }else{
+                    set(push(ref(db, 'groupChat')),{
                         sendName:userInfo.displayName,
                         sendId:userInfo.uid,
                         reciveName:active.activeChatName,
@@ -174,7 +195,7 @@ const MessageList = () => {
                                 <ModalImage
                                     small={item.img}
                                     large={item.img}
-                                />;
+                                />
                             </div>
                             <span>{moment(item.date, "YYYYMMDD hh:mm").fromNow()}</span>
                         </div>
@@ -183,7 +204,7 @@ const MessageList = () => {
                                 <ModalImage
                                     small={item.img}
                                     large={item.img}
-                                />;
+                                />
                             </div>
                             <span>{moment(item.date, "YYYYMMDD hh:mm").fromNow()}</span>
                         </div>
@@ -230,7 +251,7 @@ const MessageList = () => {
                                 <ModalImage
                                     small={item.img}
                                     large={item.img}
-                                />;
+                                />
                             </div>
                             <span>{moment(item.date, "YYYYMMDD hh:mm").fromNow()}</span>
                         </div>
@@ -239,7 +260,7 @@ const MessageList = () => {
                                 <ModalImage
                                     small={item.img}
                                     large={item.img}
-                                />;
+                                />
                             </div>
                             <span>{moment(item.date, "YYYYMMDD hh:mm").fromNow()}</span>
                         </div>
@@ -311,31 +332,31 @@ const MessageList = () => {
             </div>
         </div>
         :<>
-            <div className="input">
-                <input onChange={(e)=>setSendMessage(e.target.value)} type='text' value={sendMessage}  />
-                <div className='emoji' >
-                    <BsFillEmojiSmileFill onClick={()=>setEmoji(!emoji)} />
-                    {emoji && <EmojiPicker onEmojiClick={(e)=>setSendMessage(sendMessage+e.emoji)} />}
-                </div>
-                <label>
-                    <input type="file" hidden onChange={handleImgUplod} accept="image/*" />
-                    <BsImages className='imgIcon'/>
-                </label>
-                <div className='audio'>
-                <React.StrictMode>
-                    <AudioRecorder 
-                    onRecordingComplete={addAudioElement}
-                    audioTrackConstraints={{
-                        noiseSuppression: true,
-                        echoCancellation: true,
-                    }} 
-                    downloadOnSavePress={false}
-                    downloadFileExtension="webm"
-                    />
-                </React.StrictMode>
-                </div>
+        <div className="input">
+            <input onChange={(e)=>setSendMessage(e.target.value)} type='text' value={sendMessage}  />
+            <div className='emoji' >
+                <BsFillEmojiSmileFill onClick={()=>setEmoji(!emoji)} />
+                {emoji && <EmojiPicker onEmojiClick={(e)=>setSendMessage(sendMessage+e.emoji)} />}
             </div>
-            <Button variant="contained" onClick={handleMessage} >Send</Button>
+            <label>
+                <input type="file" hidden onChange={handleImgUplod} accept="image/*" />
+                <BsImages className='imgIcon'/>
+            </label>
+            <div className='audio'>
+            <React.StrictMode>
+                <AudioRecorder 
+                onRecordingComplete={addAudioElement}
+                audioTrackConstraints={{
+                    noiseSuppression: true,
+                    echoCancellation: true,
+                }} 
+                downloadOnSavePress={false}
+                downloadFileExtension="webm"
+                />
+            </React.StrictMode>
+            </div>
+        </div>
+        <Button variant="contained" onClick={handleMessage} >Send</Button>
         </>
         }
         </div>
