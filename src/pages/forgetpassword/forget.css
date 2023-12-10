@@ -1,14 +1,11 @@
 .forget{
     height:100vh;
-    background-color: #444;
     display: flex;
     justify-content: center;
     align-items: center;
 }
 .forget div{
-    background-color: #ffff;
     text-align: center;
-    padding:10px;
     
 }
 .forget .input{

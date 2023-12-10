@@ -86,7 +86,7 @@ const Sightbar = () => {
     // ///////////
 
     const getCropData = () => {
-      if (typeof cropperRef.current?.cropper !== "undefined") {
+      if (typeof cropperRef.current?.cropper !== "undefined"){
         const message4 = cropperRef.current?.cropper.getCroppedCanvas().toDataURL();
         uploadString(storageRef, message4, 'data_url').then((snapshot) => {
           console.log('Uploaded a data_url string!');
@@ -105,7 +105,6 @@ const Sightbar = () => {
           });
         });
       }
-      console.log('img uplod');
     };
 
 
@@ -162,13 +161,6 @@ const Sightbar = () => {
                 style={{ width: "50%", float: "right", height: "300px" }}
               >
                 <Button onClick={getCropData} variant="contained">uplod</Button>
-                {/* <h1>
-                  <span>Crop</span>
-                  <button style={{ float: "right" }} onClick={getCropData}>
-                    Crop Image
-                  </button>
-                </h1>
-                <img style={{ width: "100%" }} src={cropData} alt="cropped" /> */}
               </div>
             </div>
           </Typography>

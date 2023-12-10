@@ -32,11 +32,6 @@ const Home = () => {
                   activeChatName:item.val().activeChatName
                 }))
               }
-              // dispatch(activeUser({
-              //   type:'single',
-              //   activeChatId:item.val().activeChatId,
-              //   activeChatName:item.val().activeChatName
-              // }))
             })
         });
   },[])

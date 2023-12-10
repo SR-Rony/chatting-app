@@ -3,9 +3,7 @@ import './registration.css'
 import Container from '@mui/material/Container';
 import TextField from '@mui/material/TextField';
 import Button from '@mui/material/Button';
-import Images from '../../components/images/Images';
 import {Link,useNavigate} from 'react-router-dom'
-import Img from '../../assets/registration.png'
 import Alert from '@mui/material/Alert';
 import { FaEye,FaEyeSlash } from "react-icons/fa";
 import { getAuth, createUserWithEmailAndPassword ,sendEmailVerification,updateProfile  } from "firebase/auth";
@@ -117,47 +115,42 @@ const Registration = () => {
 
   return (
     <div className='registration'>
-      <div className="left">
-      <Container maxWidth="sm">
-        <h2>get stared with easily register</h2>
-        <p>Free register and you can enjoy it</p>
-        <TextField className='input' name='fullName' type='text' id="outlined-basic" label="full name" variant="outlined" onChange={handleChange} value={fullName}/>
-        { nameError &&
-          <Alert severity="error">{nameError}</Alert>
-        }
-        <TextField className='input' name='email' type='email' id="outlined-basic" label="email" variant="outlined" onChange={handleChange} value={email}/>
-        {emailError&&
-          <Alert severity="error">{emailError}</Alert>
-        }
-        <div className="password">
-          <TextField className='input' name='password' type={eyeToggle?'password':'text'} id="outlined-basic" label="password" variant="outlined" onChange={handleChange} value={password}/>
-          {
-          eyeToggle
-          ?<FaEyeSlash onClick={()=>serEyeToggle(false)} className='eye'/>
-          : <FaEye onClick={()=>serEyeToggle(true)} className='eye'/>
+      <div className="main">
+      <h2>get stared with easily <span>register</span></h2>
+          <p>Free register and you can enjoy it</p>
+          <TextField className='input' name='fullName' type='text' id="outlined-basic" label="full name" variant="outlined" onChange={handleChange} value={fullName}/>
+          { nameError &&
+            <Alert severity="error">{nameError}</Alert>
           }
-        </div>
-        {passwordError&&
-          <Alert severity="error">{passwordError}</Alert>
-        }
+          <TextField className='input' name='email' type='email' id="outlined-basic" label="email" variant="outlined" onChange={handleChange} value={email}/>
+          {emailError&&
+            <Alert severity="error">{emailError}</Alert>
+          }
+          <div className="password">
+            <TextField className='input' name='password' type={eyeToggle?'password':'text'} id="outlined-basic" label="password" variant="outlined" onChange={handleChange} value={password}/>
+            {
+            eyeToggle
+            ?<FaEyeSlash onClick={()=>serEyeToggle(false)} className='eye'/>
+            : <FaEye onClick={()=>serEyeToggle(true)} className='eye'/>
+            }
+          </div>
+          {passwordError&&
+            <Alert severity="error">{passwordError}</Alert>
+          }
 
-        {dataLod 
-        ?<Button className='btn' variant="contained">
-          <RotatingLines
-            strokeColor="white"
-            strokeWidth="3"
-            animationDuration="0.75"
-            width="30"
-            visible={true}
-          />
-        </Button>
-        :<Button onClick={handleClick} className='btn' variant="contained">Sign in</    Button>
-        }
-        <p>Don't have an acount ? <Link className='focas' to='/login'>Sing In</Link></p>
-      </Container>
-      </div>
-      <div className="right">
-        <Images className='img' src={Img}/>
+          {dataLod 
+          ?<Button className='btn' variant="contained">
+            <RotatingLines
+              strokeColor="white"
+              strokeWidth="3"
+              animationDuration="0.75"
+              width="30"
+              visible={true}
+            />
+          </Button>
+          :<Button onClick={handleClick} className='btn' variant="contained">Sign in</    Button>
+          }
+          <p>Don't have an acount ? <Link className='focas' to='/login'>Sing In</Link></p>
       </div>
     </div>
   )

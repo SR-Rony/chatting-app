@@ -3,9 +3,7 @@ import './login.css'
 import Container from '@mui/material/Container';
 import TextField from '@mui/material/TextField';
 import Button from '@mui/material/Button';
-import Images from '../../components/images/Images';
 import {Link ,json,useNavigate} from 'react-router-dom'
-import Img from '../../assets/loging.png'
 import Alert from '@mui/material/Alert';
 import { FaEye,FaEyeSlash } from "react-icons/fa";
 import { getAuth, signInWithEmailAndPassword,GoogleAuthProvider,signInWithPopup } from "firebase/auth";
@@ -97,11 +95,10 @@ const Login = () => {
   }
 
   return (
-    <div className='registration'>
-      <div className="left">
-      <Container maxWidth="sm">
-        <Hadding text='Login to your account!'/>
-        <Paragraph text='Free register and you can enjoy it'/>
+    <div className='login'>
+      <div className="main">
+      <h2>Login to your <span>account!</span></h2>
+        <p>Free register and you can enjoy it</p>
         <Button onClick={handleGoogle} className='btn' variant="contained">goole Sign in</Button>
         <TextField className='input' name='email' type='email' id="outlined-basic" label="inter your email" variant="outlined" onChange={handleChang} value={email}/>
         {emailError &&
@@ -131,11 +128,7 @@ const Login = () => {
         :<Button onClick={handleClick} className='btn' variant="contained">Sign in</    Button>
         }
         <p>Don't have an acount ? <Link className='focas' to='/'>Sing Up</Link></p>
-        <p>Don't have an acount ? <Link className='focas' to='/forget'>forget Password</Link></p>
-      </Container>
-      </div>
-      <div className="right">
-        <Images className='img' src={Img}/>
+        <p><Link className='focas' to='/forget'>forget Password</Link></p>
       </div>
     </div>
   )
