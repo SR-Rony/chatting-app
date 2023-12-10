@@ -6,6 +6,7 @@ import Button from '@mui/material/Button';
 import { getDatabase, ref,set, onValue, remove,push} from "firebase/database";
 import { useDispatch, useSelector } from 'react-redux';
 import { activeUser } from '../../slices/activeUserSlice';
+import { useNavigate } from 'react-router-dom';
 
 
 const Friend = () => {
@@ -13,6 +14,7 @@ const Friend = () => {
     const userInfo =useSelector(state=>state.loginSlice.value)
     const [friend,setFriend]=useState([])
     let dispatch=useDispatch()
+    let navigate=useNavigate()
 
     useEffect(()=>{
         ///////////////// firebase friend confrim data ///////////////////////
@@ -52,6 +54,7 @@ const Friend = () => {
     }
     // handle active click
     const handleActive =(item)=>{
+        navigate('/messages')
         if(userInfo.uid==item.reciveId){
             dispatch(activeUser({
                 type:'single',
@@ -84,12 +87,13 @@ const Friend = () => {
     <div className='box'>
         <Hadding text ='Friends'/>
         {friend.map((item)=>(
-             <div className='list' onClick={()=>handleActive(item)}>
+             <div className='list'>
              <Images className='list-img' src={img} />
              <div className="text">
                  <Hadding text ={item.sendId==userInfo.uid ? item.reciveName :item.sendName}/>
              </div>
              <div className="flex">
+                <Button className='btn' onClick={()=>handleActive(item)} variant="contained">message</Button>
                 <Button className='btn' onClick={()=>handleBlock(item)} variant="contained" color='error'>block</Button>
              </div>
          </div>

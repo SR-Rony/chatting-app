@@ -50,7 +50,7 @@ const Group = () => {
     <div className='box'>
         <Hadding text ='My Groups'/>
         {group.map((item)=>(
-            <div className='list' onClick={()=>handleGroupActive(item)}>
+            <div className='list'>
                 <Images className='list-img' src={img} />
                 <div className="text">
                     <Hadding text ={item.groupName}/>
@@ -63,7 +63,7 @@ const Group = () => {
                     </div>
                     :<Button className='btn' onClick={()=>handleGroupCancel(group)} color='error' variant="contained">cancel</Button>
                 } */}
-                
+                <Button className='btn' onClick={()=>handleGroupActive(item)} variant="contained">message</Button>
             </div>
         ))}
     </div>

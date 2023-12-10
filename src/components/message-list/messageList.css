@@ -25,7 +25,7 @@
     padding: 5px 20px;
     border-bottom: 1px solid black;
     display: flex;
-    gap: 5px;
+    gap: 10px;
     align-items: center;
     margin-bottom: 20px;
     position: absolute;
@@ -33,6 +33,7 @@
     top: 0;
     left: 0;
     background-color: white;
+    z-index: 99;
 }
 .message-list .profile p{
     font-weight: bold;
@@ -101,7 +102,7 @@
     position: relative;
 }
 .write-message .input input{
-    padding: 7px;
+    padding: 10px;
     width: 100%;
     background-color: #f1f1f1;
     font-size: 20px;
