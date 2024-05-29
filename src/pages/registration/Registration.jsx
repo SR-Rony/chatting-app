@@ -62,16 +62,16 @@ const Registration = () => {
       }
       if(fullName && email && password){
         let validEmail = /^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/;
-        let validPassword = /^(?=.*[0-9])(?=.*[!@#$%^&*])[a-zA-Z0-9!@#$%^&*]{8,16}$/; 
+        // let validPassword = /^(?=.*[0-9])(?=.*[!@#$%^&*])[a-zA-Z0-9!@#$%^&*]{8,16}$/; 
         //////////// valid email chack /////////////// 
         if(!validEmail.test(email)){
           setEmailError('invalid email')
 
         }else{
           //////////////// valid password chack ///////////////////
-          if(!validPassword.test(password)){
-            setPasswordError('password not storng')
-          }else{
+          // if(!validPassword.test(password)){
+          //   setPasswordError('password not storng')
+          // }else{
             setDataLod(true)
             ////////////// user authencation /////////////////
             createUserWithEmailAndPassword(auth, email, password)
@@ -109,7 +109,7 @@ const Registration = () => {
               setDataLod(false)
             });
           }
-        }
+        // }
       }
     }
 
