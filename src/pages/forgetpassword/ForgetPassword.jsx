@@ -1,9 +1,9 @@
-import React, { useState } from 'react'
+import { useState } from 'react'
 import './forget.css'
 import TextField from '@mui/material/TextField';
 import Button from '@mui/material/Button';
 import { getAuth, sendPasswordResetEmail } from "firebase/auth";
-import {Link,useNavigate} from 'react-router-dom'
+import {useNavigate} from 'react-router-dom'
 import { toast } from 'react-toastify';
 import Hadding from '../../components/hadding/Hadding';
 
@@ -34,8 +34,8 @@ const ForgetPassword = () => {
     <div className='forget'>
         <div>
             <Hadding className='hadding' text='forget password'/>
-            <TextField className='input' onChange={(e)=>setEmail(e.target.value)} type='email' id="outlined-basic" label="your email" variant="outlined" />
-            <Button className='btn' onClick={handlPasswordChang} variant="contained">Click Me</Button>
+            <TextField className='input' onChange={(e)=>setEmail(e.target.value)} type='email' id="standard-basic" label="your email" variant="standard" />
+            <Button size='small' color='success' className='btn' onClick={handlPasswordChang} variant="contained">Click Me</Button>
         </div>
     </div>
   )

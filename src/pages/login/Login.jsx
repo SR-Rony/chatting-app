@@ -1,24 +1,21 @@
 import React, { useState,useEffect } from 'react'
 import './login.css'
-import Container from '@mui/material/Container';
 import TextField from '@mui/material/TextField';
 import Button from '@mui/material/Button';
-import {Link ,json,useNavigate} from 'react-router-dom'
+import {Link ,useNavigate} from 'react-router-dom'
 import Alert from '@mui/material/Alert';
 import { FaEye,FaEyeSlash } from "react-icons/fa";
 import { getAuth, signInWithEmailAndPassword,GoogleAuthProvider,signInWithPopup } from "firebase/auth";
-import { getDatabase, ref, set,push } from "firebase/database";
+import { getDatabase,} from "firebase/database";
 import { RotatingLines } from 'react-loader-spinner'
 import { toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import {useSelector,useDispatch } from 'react-redux';
 import { userLogin } from '../../slices/loginSlice';
-import Paragraph from '../../components/paragraph/Paragraph';
-import Hadding from '../../components/hadding/Hadding';
 
 
 const Login = () => {
-  const db = getDatabase();
+  // const db = getDatabase();
   const provider = new GoogleAuthProvider();
   const auth = getAuth();
   let navigete=useNavigate()
@@ -82,7 +79,6 @@ const Login = () => {
 
       }).catch((error) => {
         const errorCode = error.code;
-        const errorMessage = error.message;
         if(errorCode.includes('user')){
           toast("invalid email");
         }else{
@@ -97,15 +93,13 @@ const Login = () => {
   return (
     <div className='login'>
       <div className="main">
-      <h2>Login to your <span>account!</span></h2>
-        <p>Free register and you can enjoy it</p>
-        <Button onClick={handleGoogle} className='btn' variant="contained">goole Sign in</Button>
-        <TextField className='input' name='email' type='email' id="outlined-basic" label="inter your email" variant="outlined" onChange={handleChang} value={email}/>
+      <h2>Login</h2>
+        <TextField className='input' name='email' type='email' id="standard-basic" label="inter your email" variant="standard" onChange={handleChang} value={email}/>
         {emailError &&
           <Alert severity="error">{emailError} !</Alert>
         }
         <div className="password">
-        <TextField className='input' name='password' type={eyeToggle?'password':'text'} id="outlined-basic" label="inter your password" variant="outlined" onChange={handleChang} value={password}/>
+        <TextField className='input' name='password' type={eyeToggle?'password':'text'} id="standard-basic" label="inter your password" variant="standard" onChange={handleChang} value={password}/>
         {
           eyeToggle
           ?<FaEyeSlash onClick={()=>serEyeToggle(false)} className='eye'/>
@@ -115,6 +109,7 @@ const Login = () => {
         {passwordError &&
            <Alert severity="error">{passwordError} !</Alert>
         }
+        <p><Link to='/forget'>forget Password</Link></p>
          {dataLod 
         ?<Button className='btn' variant="contained">
           <RotatingLines
@@ -125,10 +120,10 @@ const Login = () => {
             visible={true}
           />
         </Button>
-        :<Button onClick={handleClick} className='btn' variant="contained">Sign in</    Button>
+        :<Button size='small' color='success' onClick={handleClick} className='btn' variant="contained">Sign in</    Button>
         }
+        <Button size='small' color='success' onClick={handleGoogle} className='btn' variant="contained">goole Sign in</Button>
         <p>Don't have an acount ? <Link className='focas' to='/'>Sing Up</Link></p>
-        <p><Link className='focas' to='/forget'>forget Password</Link></p>
       </div>
     </div>
   )

@@ -1,13 +1,12 @@
-import React, { useState,useEffect } from 'react'
+import { useState,useEffect } from 'react'
 import './registration.css'
-import Container from '@mui/material/Container';
 import TextField from '@mui/material/TextField';
 import Button from '@mui/material/Button';
 import {Link,useNavigate} from 'react-router-dom'
 import Alert from '@mui/material/Alert';
 import { FaEye,FaEyeSlash } from "react-icons/fa";
 import { getAuth, createUserWithEmailAndPassword ,sendEmailVerification,updateProfile  } from "firebase/auth";
-import { getDatabase, ref, set,push } from "firebase/database";
+import { getDatabase, ref, set } from "firebase/database";
 import { RotatingLines } from 'react-loader-spinner'
 import { toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
@@ -116,18 +115,17 @@ const Registration = () => {
   return (
     <div className='registration'>
       <div className="main">
-      <h2>get stared with easily <span>register</span></h2>
-          <p>Free register and you can enjoy it</p>
-          <TextField className='input' name='fullName' type='text' id="outlined-basic" label="full name" variant="outlined" onChange={handleChange} value={fullName}/>
+      <h2>register</h2>
+          <TextField className='input' name='fullName' type='text' id="standard-basic" label="full name" variant="standard" onChange={handleChange} value={fullName}/>
           { nameError &&
             <Alert severity="error">{nameError}</Alert>
           }
-          <TextField className='input' name='email' type='email' id="outlined-basic" label="email" variant="outlined" onChange={handleChange} value={email}/>
+          <TextField className='input' name='email' type='email' id="standard-basic" label="email" variant="standard" onChange={handleChange} value={email}/>
           {emailError&&
             <Alert severity="error">{emailError}</Alert>
           }
           <div className="password">
-            <TextField className='input' name='password' type={eyeToggle?'password':'text'} id="outlined-basic" label="password" variant="outlined" onChange={handleChange} value={password}/>
+            <TextField className='input' name='password' type={eyeToggle?'password':'text'} id="standard-basic" label="password" variant="standard" onChange={handleChange} value={password}/>
             {
             eyeToggle
             ?<FaEyeSlash onClick={()=>serEyeToggle(false)} className='eye'/>
@@ -148,7 +146,7 @@ const Registration = () => {
               visible={true}
             />
           </Button>
-          :<Button onClick={handleClick} className='btn' variant="contained">Sign in</    Button>
+          :<Button size='small' onClick={handleClick} className='btn' color='success' variant="contained">Sign in</    Button>
           }
           <p>Don't have an acount ? <Link className='focas' to='/login'>Sing In</Link></p>
       </div>

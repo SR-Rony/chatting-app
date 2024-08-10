@@ -10,11 +10,11 @@
     text-align: center;
 }
 h2{
+    padding-bottom: 10px;
     font-size: 30px;
     font-weight: bold;
-}
-h2 span{
-    color: orange;
+    color: green;
+    border-bottom: 2px solid green;
 }
 p{
     font-size: 25px;
@@ -25,16 +25,13 @@ p{
     width: 100%;
     margin: 10px 0;
 }
-.main .btn{
+.btn{
     width: 100%;
     border-radius: 50px;
-    padding: 10px 0;
-    margin-top: 20px;
-    font-size: 20px;
 }
 .focas {
     font-weight: bold;
-    color: orange;
+    color: green;
 }
 .password{
     position: relative;
