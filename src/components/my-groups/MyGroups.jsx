@@ -103,16 +103,16 @@ const MyGroups = () => {
   return (
     <div className='box'>
         <Hadding text ='My Groups'/>
-        {groupArray.map((group)=>(
-            <div className='list'>
+        {groupArray.map((group,index)=>(
+            <div key={index} className='list'>
                 <Images className='list-img' src={img} />
                 <div className="text">
                     <Hadding text ={group.groupName}/>
                 </div>
                 <div className="flex">
-                <Button className='btn' onClick={()=>handleRequestOpen(group)}  variant="contained">Requst</Button>
-                <Button className='btn' onClick={()=>handleConfirmOpen(group)} variant="contained">Member</Button>
-                <Button className='btn' onClick={()=>handleDelete(group.groupId)} color='error'  variant="contained">delete</Button>
+                <Button onClick={()=>handleRequestOpen(group)}  variant="contained">Requst</Button>
+                <Button onClick={()=>handleConfirmOpen(group)} variant="contained">Member</Button>
+                <Button  onClick={()=>handleDelete(group.groupId)} color='error'  variant="contained">delete</Button>
                 </div>
             </div>
         ))}
@@ -145,8 +145,8 @@ const MyGroups = () => {
                             color="text.primary"
                         >
                              <div className="flex">
-                                <Button className='btn' onClick={()=>handleConfirm(item)}  variant="contained">confirm</Button>
-                                <Button className='btn' onClick={()=>handleCancel(item)}  color='error' variant="contained">cancel</Button>
+                                <Button  onClick={()=>handleConfirm(item)}  variant="contained">confirm</Button>
+                                <Button  onClick={()=>handleCancel(item)}  color='error' variant="contained">cancel</Button>
                              </div>
                         </Typography>
                         </React.Fragment>
@@ -186,7 +186,7 @@ const MyGroups = () => {
                             variant="body2"
                             color="text.primary"
                         >
-                        <Button className='btn' onClick={()=>deleteGroupMember(item)}  color='error' variant="contained">Delete</Button>
+                        <Button onClick={()=>deleteGroupMember(item)}  color='error' variant="contained">Delete</Button>
                              
                         </Typography>
                         </React.Fragment>

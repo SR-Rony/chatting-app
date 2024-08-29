@@ -43,10 +43,6 @@ h3{
     object-fit: cover;
     border-radius: 50%;
 }
-.btn{
-    margin: 0 5px !important;
-    text-transform: capitalize !important;
-}
 .flex{
     display: flex;
     justify-content: space-between;

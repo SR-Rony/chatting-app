@@ -86,15 +86,15 @@ const Friend = () => {
   return (
     <div className='box'>
         <Hadding text ='Friends'/>
-        {friend.map((item)=>(
-             <div className='list'>
+        {friend.map((item,index)=>(
+             <div key={index} className='list'>
              <Images className='list-img' src={img} />
              <div className="text">
                  <Hadding text ={item.sendId==userInfo.uid ? item.reciveName :item.sendName}/>
              </div>
              <div className="flex">
-                <Button className='btn' onClick={()=>handleActive(item)} variant="contained">message</Button>
-                <Button className='btn' onClick={()=>handleBlock(item)} variant="contained" color='error'>block</Button>
+                <Button  onClick={()=>handleActive(item)} variant="contained">message</Button>
+                <Button  onClick={()=>handleBlock(item)} variant="contained" color='error'>block</Button>
              </div>
          </div>
         ))}

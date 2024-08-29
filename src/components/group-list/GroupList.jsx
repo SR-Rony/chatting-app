@@ -116,17 +116,17 @@ const GroupList = () => {
     <div className='box'>
         <div className="flex">
             <Hadding text ='Groups List'/>
-            <Button className='btn' onClick={handleOpen} variant="contained">create group</Button>
+            <Button onClick={handleOpen} variant="contained">create group</Button>
         </div>
-        {groupArray.map((group)=>(
-             <div className='list'>
+        {groupArray.map((group,index)=>(
+             <div key={index} className='list'>
              <Images className='list-img' src={img} />
              <div className="text">
                  <Hadding text ={group.groupName}/>
              </div>
              {groupId.find((e)=>e.groupId==group.groupId)
-              ?<Button className='btn' onClick={()=>handleGroupCancel(group)} color='error' variant="contained">cancel</Button>
-              :<Button className='btn' onClick={()=>handleGroupJoin(group)} variant="contained">join</Button>
+              ?<Button onClick={()=>handleGroupCancel(group)} color='error' variant="contained">cancel</Button>
+              :<Button  onClick={()=>handleGroupJoin(group)} variant="contained">join</Button>
               // <Button className='btn' onClick={()=>handleGroupJoin(group)} variant="contained">join</Button>
              }
 

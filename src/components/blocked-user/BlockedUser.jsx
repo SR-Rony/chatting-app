@@ -43,14 +43,14 @@ const BlockedUser = () => {
   return (
     <div className='box'>
         <Hadding text ='Blocked Users'/>
-        {block.map((item)=>(
-            <div className='list'>
+        {block.map((item,index)=>(
+            <div key={index} className='list'>
                 <Images className='list-img' src={img} />
                 <div className="text">
                     <Hadding text ={item.blockName}/>
                 </div>
                 {item.block}
-                <Button className='btn' onClick={()=>handleAddFriend(item)} color='error' variant="contained">unblock</Button>
+                <Button onClick={()=>handleAddFriend(item)} color='error' variant="contained">unblock</Button>
             </div>
         ))}
     </div>

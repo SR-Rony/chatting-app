@@ -82,38 +82,38 @@ const handleNameSearce =(e)=>{
 
         {searchName.length>0
         ?
-        searchName.map((user)=>(
+        searchName.map((user,index)=>(
             // inputValue.toLowerCase()==user.username.toLowerCase()
             // ?
-            <div className='list'>
+            <div key={index} className='list'>
                 <Images className='list-img' src={user.profile_picture} />
                 <div className="text">
                     <Hadding text ={user.username}/>
                 </div>
                 {friendReqId.includes(user.userId+userInfo.uid) || friendReqId.includes(userInfo.uid+user.userId)
-                ? <Button className='btn' variant="contained" color='error'>panding</Button>
+                ?<Button variant="contained" color='error'>panding</Button>
                 :confrimFriendId.includes(user.userId+userInfo.uid)||confrimFriendId.includes(userInfo.uid+user.userId)
-                ?<Button className='btn' variant="contained" color='success'>friend</Button>
+                ?<Button variant="contained" color='success'>friend</Button>
                 :friendBlockId.includes(user.userId+userInfo.uid)||friendBlockId.includes(userInfo.uid+user.userId)
-                ?<Button className='btn' variant="contained" color='error'>block</Button>
-                :<Button className='btn' onClick={()=>handleFriendRequest(user)} variant="contained">F request</Button>
+                ?<Button variant="contained" color='error'>block</Button>
+                :<Button onClick={()=>handleFriendRequest(user)} variant="contained">F request</Button>
             }   
             </div>
             // :<p>no search found</p>
         ))
-        : userArray.map((user)=>(
-            <div className='list'>
+        : userArray.map((user,index)=>(
+            <div key={index} className='list'>
                 <Images className='list-img' src={user.profile_picture} />
                 <div className="text">
                     <Hadding text ={user.username}/>
                 </div>
                 {friendReqId.includes(user.userId+userInfo.uid) || friendReqId.includes(userInfo.uid+user.userId)
-                ? <Button className='btn' variant="contained" color='error'>panding</Button>
+                ? <Button  variant="contained" color='error'>panding</Button>
                 :confrimFriendId.includes(user.userId+userInfo.uid)||confrimFriendId.includes(userInfo.uid+user.userId)
-                ?<Button className='btn' variant="contained" color='success'>friend</Button>
+                ?<Button  variant="contained" color='success'>friend</Button>
                 :friendBlockId.includes(user.userId+userInfo.uid)||friendBlockId.includes(userInfo.uid+user.userId)
-                ?<Button className='btn' variant="contained" color='error'>block</Button>
-                :<Button className='btn' onClick={()=>handleFriendRequest(user)} variant="contained">F request</Button>
+                ?<Button  variant="contained" color='error'>block</Button>
+                :<Button  onClick={()=>handleFriendRequest(user)} variant="contained">F request</Button>
             }   
             </div>
         ))

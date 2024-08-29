@@ -42,15 +42,15 @@ const handleDelete =(freqId)=>{
 return (
     <div className='box'>
     <Hadding text ='Friend  Request'/>
-        {friendRequest.map((item)=>(
-            <div className='list'>
+        {friendRequest.map((item,index)=>(
+            <div key={index} className='list'>
                 <Images className='list-img' src={img} />
                 <div className="text">
                     <Hadding text ={item.sendName}/>
                 </div>
                 <div className="flex">
-                    <Button className='btn' onClick={()=>handleConfrim(item)} variant="contained">confrim</Button>
-                    <Button className='btn' onClick={()=>handleDelete(item.freqId)} variant="contained" color='error'>delet</Button>
+                    <Button onClick={()=>handleConfrim(item)} variant="contained">confrim</Button>
+                    <Button onClick={()=>handleDelete(item.freqId)} variant="contained" color='error'>delet</Button>
                 </div>
             </div>
         ))}
